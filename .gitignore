@@ -1,0 +1,15 @@
+# Ignore configuration files that may contain sensitive information.
+sites/*/settings*.php
+
+# Ignore paths that contain user-generated content.
+sites/*/private
+sites/*/tmp
+sites/*/files/*/*
+
+# Ignore databases
+*.sql
+databases/*
+
+#Ignore netbeans stuff
+nbproject/*
+.idea/*
