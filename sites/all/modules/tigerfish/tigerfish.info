@@ -1,0 +1,10 @@
+name = Tigerfish Utility module
+description = Provides utility functions and classes for Tigerfish sites
+core = 7.x
+version = "7.x-1.0"
+
+files[] = TigerfishImage.php
+
+scripts[] = js/shadowbox/shadowbox.js
+
+stylesheets[all][] = js/shadowbox/shadowbox.css

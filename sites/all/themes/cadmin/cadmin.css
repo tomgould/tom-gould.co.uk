@@ -1,0 +1,772 @@
+body.tao {
+  background: url('images/bleeds.png') repeat-x 0 -50px #A8A8A8;
+  font-size: 11px;
+}
+a {
+  color: #0074BD;
+}
+body, input, textarea, select {
+  font-family:Tahoma,Verdana,sans-serif;
+}
+.ui-widget {
+  font-family: Tahoma,Verdana,sans-serif;
+  font-size: 11px;
+}
+.ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {
+  font-family: Tahoma,Verdana,sans-serif;
+  font-size: 12px;
+}
+.tao #page-title {
+  border-top:1px solid #fff;
+  margin:0;
+  background: none;
+}
+#page-title .page-title {
+  text-shadow: 0 1px 0 white;
+  color: #555;
+}
+.pager li, .primary-tabs li {
+  height: 29px;
+}
+#content dl.multiselect select {
+  padding: 2px;
+}
+#content dl.multiselect .form-item {
+  margin-bottom: 1px;
+}
+#overlay-content #branding {
+  color: #EEE;
+  background: #656565 url('images/branding.jpg') repeat-x 0 -58px;
+  padding: 0px 0 0px;
+  border-bottom: 1px solid #888;
+  margin: 0;
+  height: 29px;
+}
+#overlay-content #page-title {
+  border-top:none;
+  margin:0;
+  background: #F4F4F4 url(images/bleeds_2.png) 0px -417px repeat-x;
+  -moz-border-radius: 0 0 0 0;
+  -webkit-border-radius: 0 0 0 0;
+  border-radius: 0 0 0 0;
+}
+#overlay-content {
+  background: #f9f9f9;
+}
+#overlay-content #page-title .page-title {
+  color: #fff;
+  text-shadow: #999 0px -1px 0px;
+  -webkit-text-shadow: #999 0px -1px 0px;
+}
+.tao #branding {
+  color:#eee;
+  background: #656565 url('images/branding.jpg') no-repeat 0 0;
+  padding: 58px 0 0px;
+  border-bottom:1px solid #888;
+  margin:0;
+}
+.tao #branding .limiter {
+  background: #656565 url('images/bg-breadcrumb.gif') repeat-x bottom left;
+}
+.tao #branding .breadcrumb a, #branding .breadcrumb strong {
+  padding-top: 4px;
+}
+
+.admin-list a {
+  font-size: 12px;
+}
+
+div.form-item label.option input {
+  vertical-align:text-top;
+}
+
+div.form-item-role,
+div.form-item-permission,
+div.form-item-status,
+div.form-item-type {
+  margin-bottom: 3px;
+}
+.form-item-role select,
+.form-item-permission select,
+.form-item-status select,
+.form-item-type select {
+  width: 200px;
+  font-size: 12px;
+}
+.path-node-add {
+  font-size: 12px;
+  font-weight: bold;
+}
+.form-item-admin-theme {
+  float: left;
+}
+div.form-item-node-admin-theme {
+  float: left;
+  margin-left: 25px;
+  margin-top: 21px;
+}
+.form-actions {
+  clear: left;
+}
+
+.secondary-tabs {
+  min-width: 100px;
+  float: none;
+  position: static;
+  margin: 0px 0px 7px 0px;
+  padding-bottom: 7px;
+  font-size: 11px;
+  background: transparent;
+  border-bottom: solid 1px #fff;
+}
+.secondary-tabs:hover {
+  background: transparent;
+  opacity: 1;
+}
+ul.secondary-tabs li {
+  margin: 0 0 0 0;
+}
+ul.secondary-tabs li,
+ul.secondary-tabs li a {
+  float: right;
+  height: auto;
+  text-align: left;
+  background: none;
+}
+ul.secondary-tabs li a {
+  display: block;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #DDD #DDD #CCC;
+  color: #777;
+  margin: 0 0 0 5px;
+  float: right;
+  line-height: 15px;
+  padding: 3px 15px 3px 15px;
+  background: #F4F4F4 url(images/bleeds_2.png) 0px -61px repeat-x;
+  text-shadow: #fff 0px 1px 0px;
+  -webkit-box-shadow: #ddd 0px 1px 1px;
+  -moz-box-shadow: #ddd 0px 1px 1px;
+  box-shadow: #ddd 0px 1px 1px;
+}
+.tao ul.secondary-tabs li a.active,
+.tao ul.secondary-tabs a:hover {
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  background: #7BC;
+  color: white;
+  text-shadow: #38A 0px 1px 0px;
+  display: block;
+  border-color: #59A;
+}
+
+/**
+ * Console ============================================================
+ */
+div.messages {
+  color:#036;
+  background-color:#f8f8f8;
+  padding:9px;
+  margin:0px 0px 10px;
+  -webkit-box-shadow: #ddd 0px 1px 3px;
+  -moz-box-shadow: #ddd 0px 1px 3px;
+  box-shadow: #ddd 0px 1px 3px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  border: 5px solid white!important;
+  font-size: 12px;
+  }
+
+table tr.warning th,
+div.warning {
+  color:#a84;
+  background-color:#fff4c0;
+  }
+
+table tr.error th,
+div.error {
+  color:#965;
+  background-color:#ffe4e0;
+  }
+
+table tr.ok th,
+table tr.info th,
+div.status {
+  color:#687;
+  background-color:#ecf8f4;
+  }
+
+  div.error   { border-color:#ffd4d0; }
+  div.warning { border-color:#ffe4b0; }
+  div.status  { border-color:#dce8e4; }
+
+/*
+div.page-content div.form-item:hover,
+div.page-content div.fieldset div.form-item:hover {
+  background-color:#FFE9BB;
+}
+
+div.page-content div.form-item:hover label,
+div.page-content div.fieldset div.form-item:hover label {
+  color: #db6c00;
+}
+div.page-content div.form-item:hover input,
+div.page-content div.fieldset div.form-item:hover input,
+div.page-content div.form-item:hover select,
+div.page-content div.fieldset div.form-item:hover select,
+div.page-content div.form-item:hover textarea,
+div.page-content div.fieldset div.form-item:hover textarea {
+  border-color: #db6c00;
+}
+
+div.page-content div.form-item div.description {
+  color:#db6c00;
+  background:#ffda8e;
+  border:5px solid #FFE9BB;
+  right:12px;
+}
+*/
+textarea.form-textarea, .resizable-textarea {
+  width: 100%;
+}
+.filter-help {
+  display: none;
+}
+.filter-wrapper .fieldset-content {
+  background: #F8F8F8!important;
+  border-top: 0px;
+  height: 20px;
+  padding: 5px 9px 4px!important;
+}
+.primary-tabs {
+  margin: 30px 0 0;
+  border-top: solid 1px #fff;
+  border-left: solid 1px #fff;
+  border-right: solid 1px #fff;
+  height: 33px;
+}
+.pager li:first-child, .primary-tabs li:first-child {
+  border-radius: 5px 0 0 0;
+}
+.pager li:last-child, .primary-tabs li:last-child {
+  border-radius: 0 5px 0 0;
+}
+#preview {
+  position: relative;
+}
+#container {
+  background: none repeat scroll 0 0 #F4F4F4;
+  border: 1px solid #fff;
+  padding: 10px 15px 15px 15px;
+  -moz-border-radius: 5px 0 5px 5px;
+  -webkit-border-radius: 5px 0 5px 5px;
+  border-radius: 5px 0 5px 5px;
+}
+
+.filefield-element .widget-edit .form-item {
+  margin:0;
+  padding: 0;
+}
+.filefield-element .widget-edit {
+  float:left;
+  max-width:70%;
+  width:70%;
+  border: solid 1px #ccc;
+  background: #F4F4F4;
+  padding: 2%;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+}
+.field-ui-overview .field-group select {
+  font-size: 11px;
+}
+table .filefield-element .widget-edit input.fluid {
+  width:70%;
+}
+.container-inline-date {
+  margin: 0;
+}
+.container-inline-date .form-item {
+  float:none;
+  margin:0 0 10px 0;
+  padding:9px 9px 0 9px;
+}
+.container-inline-date .form-item:after {
+	content: ".";
+	display: block;
+	clear: both;
+	visibility: hidden;
+	line-height: 0;
+	height: 0;
+}
+table.sticky-table a {
+  white-space: nowrap;
+}
+
+.container-inline-date .form-item {
+	display: inline-block;
+}
+
+html[xmlns] .container-inline-date .form-item {
+	display: block;
+}
+
+* html .container-inline-date .form-item {
+	height: 1%;
+}
+
+.content-add-more {
+  margin-bottom: 10px;
+}
+
+input:disabled,
+select:disabled {
+  background: #eee;
+  color: #888;
+}
+
+.filter-wrapper .fieldset-content select {
+  border-width: 1px;
+  margin-top: -2px;
+}
+
+.wysiwyg-toggle-wrapper a {
+  background: url(images/arrow-circle.png) no-repeat 1px 2px;
+  display: block;
+  padding: 0 0 1px 23px;
+}
+.form-textarea-wrapper {
+  position: relative;
+}
+.wysiwyg-toggle-wrapper {
+  position: absolute;
+  top: -23px;
+  right: 0;
+}
+
+/* ### CiviCRM Menu stuff ### --------------------- */
+
+.admin-vertical #civicrm-menu {
+  width: auto;
+  right: 0;
+  left: auto;
+  padding: 3px;
+  background: #AAA;
+  -moz-border-radius: 0 0 0 3px;
+  -webkit-border-radius: 0 0 0 3px;
+  border-radius: 0 0 0 3px;
+  border-bottom: solid 1px #fff;
+  border-left: solid 1px #fff;
+}
+.admin-vertical #civicrm-menu #crm-qsearch form,
+.admin-vertical #civicrm-menu #crm-qsearch #quickSearch {
+  float: left;
+}
+.admin-vertical #civicrm-menu #crm-qsearch {
+  width: 140px;
+  overflow: hidden;
+}
+.admin-vertical #civicrm-menu #crm-qsearch input.form-submit {
+  display: none!important;
+}
+.admin-vertical #civicrm-menu #crm-qsearch input {
+  background-color:#eee;
+  border:1px solid #fff;
+  margin:0!important;
+  padding:0 16px 0 2px;
+  width: 100px!important;
+  position: static!important;
+  float:left;
+}
+.admin-vertical #civicrm-menu li.menumain {
+  padding: 0 10px;
+  border: none;
+}
+.admin-vertical #civicrm-menu li a,
+.admin-vertical #root-menu-div li a,
+.admin-vertical #civicrm-menu li.menumain {
+  color:#fff;
+  font:11px/15px Tahoma,Verdana,sans-serif;
+  line-height: 20px;
+  color:#FFFFFF;
+  text-shadow:0 -1px 0 #888888;
+  cursor: pointer;
+}
+.admin-vertical #civicrm-menu #menu-logout  {
+  border: none;
+  display: none;
+}
+html > body.admin-vertical  div.outerbox {
+  font-size:11px;
+}
+.admin-vertical #civicrm-menu, #root-menu-div ul {
+  background: #999;
+}
+.admin-vertical #crm-container div#printer-friendly {
+  float:right;
+  margin:-3em 2em 0 0;
+  position:relative;
+}
+.admin-vertical #crm-container .crm-button-type-cancel {
+  margin-left:0;
+}
+.admin-vertical #crm-container tr {
+  font-size:1em;
+}
+.form-item {
+  padding: 9px 14px;
+}
+.form-item label {
+  color: #999999;
+  font-size: 10px;
+  font-weight: bold;
+  margin: 0;
+  padding: 0;
+  text-transform: uppercase;
+}
+
+/* Filefield sources fix */
+
+div.link-field-column {
+  float:left;
+  width:50%;
+}
+
+.block, .item-list, .help-items ul, .form-item, .confirmation ul, .admin-list, .node-type-list, .admin-panel {
+    border-color: #E8E8E8;
+    border-style: solid;
+    border-width: 1px;
+    margin: 0 0 10px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+}
+input.form-autocomplete,
+input.form-text,
+input.form-file,
+textarea.form-textarea,
+select.form-select {
+  padding: 3px;
+  border-width: 2px;
+  border-style: solid;
+  border-color: #E8E8E8 #F0F0F0 #F8F8F8;
+  background: #fff;
+  color: #333;
+}
+input.form-text:focus,
+input.form-file:focus,
+textarea.form-textarea:focus,
+select.form-select:focus {
+  color: #000;
+  border-color: #ace;
+}
+
+input.fluid {
+  -moz-box-sizing:border-box;
+  -webkit-box-sizing:border-box;
+  margin-bottom: 10px;
+}
+.commerce-price-full .form-item {
+  display: block;
+}
+
+/* Views Hackery ===--------------------------------------------------------- */
+
+.views-ui-display-tab-bucket.pager a {
+  color: #59A;
+  text-decoration: none;
+}
+.views-ui-display-tab-bucket.pager a:hover {
+  text-decoration: underline;
+}
+.views-ui-display-tab-bucket.pager a,
+.views-ui-display-tab-bucket.pager span {
+  margin: 0;
+  padding: 0;
+  float: none;
+  display: inline;
+}
+.views-ui-display-tab-bucket.pager span {
+  color: #666;
+}
+.views-ui-display-tab-bucket.pager {
+  margin: 0;
+  padding: 0;
+  height: auto;
+}
+
+#views-ui-edit-form div div.views-displays div.views-display-top ul.tabs.secondary.views-ui-render-add-view-button-processed-processed {
+	position: relative;
+}
+
+#ctools-button-9 {
+	z-index: 1;
+}
+
+#views-ui-edit-form div#edit-actions.form-actions.form-wrapper {
+	float: right;
+}
+
+#views-ui-edit-form div h1.unit-title.clearfix {
+	clear: both;
+	float: left;
+}
+
+.views-displays {
+	clear: both;
+  background: #fff;
+}
+.views-displays .ctools-button {
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #DDD #DDD #CCC;
+  background: #fff;
+  color: #777;
+  margin: 4px 5px 0 0;
+  float: right;
+  line-height: 15px;
+  background: #F4F4F4 url(images/bleeds_2.png) 0px -61px repeat-x;
+}
+.ctools-toggle {
+  margin-top: 8px;
+}
+.views-display-column > .ctools-toggle.ctools-toggle-collapsed {
+  margin-top: 12px;
+}
+.views-display-column > .ctools-toggle {
+  margin-top: 14px;
+}
+.views-display-setting .label {
+  margin-right: 3pt; /* LTR */
+}
+
+.views-admin a:hover {
+	text-decoration: none;
+}
+
+.views-display-setting .views-ajax-link {
+  margin-left: 0.2083em;
+  margin-right: 0.2083em;
+}
+
+/* Hide 'remove' checkboxes. This might be scoped too widely. */
+[class*="form-type-checkbox"][class*="remove"] {
+  display: none;
+}
+.views-admin .icon.add {
+  background-position: -5px 4px;
+}
+.views-displays .secondary a {
+  cursor: pointer;
+  padding: 2px 10px;
+  color: #333;
+  text-align: center;
+  font-weight: normal;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #DDD #DDD #CCC;
+  background: #F4F4F4 url(images/bleeds_2.png) 0px -41px repeat-x;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  -webkit-box-shadow: #ddd 0px 1px 1px;
+  -moz-box-shadow: #ddd 0px 1px 1px;
+  box-shadow: #ddd 0px 1px 1px;
+}
+.views-displays .secondary a:hover, .views-displays .secondary .active a {
+  color: #888;
+}
+#edit-display-settings-top input.form-submit {
+  margin-bottom: 0;
+  margin-right: 0;
+  margin-top: 0;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  font-size: 11px;
+  display: inline;
+  line-height: 14px;
+  background: none;
+}
+table input.fluid {
+  width: 100%;
+}
+.views-ui-display-tab-bucket > h3,
+.views-ui-display-tab-bucket > .views-display-setting {
+  padding: 3px 6px 4px;
+}
+
+.views-ui-display-tab-bucket .views-display-setting {
+  color: #666666;
+  font-size: 11px;
+  padding-bottom: 2px;
+  float: none;
+}
+.views-ui-display-tab-bucket h3 {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: #666;
+}
+
+.views-ui-display-tab-bucket h1,
+.views-ui-display-tab-bucket h2,
+.views-ui-display-tab-bucket h3,
+.views-ui-display-tab-bucket h4,
+.views-ui-display-tab-bucket h5 {
+  margin-bottom: 0;
+  margin-top: 0;
+  background: #eee;
+  color: #666;
+}
+
+#edit-display-settings-main {
+  margin-top: 15px;
+}
+
+#edit-display-preview-controls .form-type-textfield label {
+  display: inline-block;
+  font-weight: normal;
+  height: inherit;
+  margin-right: 0.75em;
+}
+
+#edit-display-preview-controls > .form-type-textfield {
+	margin-top: 6px;
+}
+
+#edit-display-preview-controls .arguments-preview,
+#edit-display-preview-controls .form-type-textfield {
+  margin-left: 14px;
+}
+
+#edit-display-preview-controls > div,
+#edit-display-preview-controls > input {
+  float: left;
+}
+
+#edit-display-preview-controls .form-item {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  padding-top: 0;
+}
+
+.ui-widget .form-item label {
+  color: #222;
+}
+
+.views-exposed-form .views-exposed-widget {
+  padding: 12px;
+  margin: 4px 12px 8px 0;
+  color: #999;
+  background-color: #FFF;
+  border: 1px #ddd solid;
+}
+
+.views-exposed-widget .form-item {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  background-color: inherit;
+}
+
+.views-exposed-widget .form-item label {
+  color: inherit;
+  text-transform: inherit;
+  font-size: inherit;
+}
+
+.views-exposed-widget label, .views-exposed-widget .form-type-select label {
+  text-transform: uppercase;
+}
+
+.views-exposed-form .views-exposed-widget input.form-autocomplete {
+  margin: 0;
+  height: 28px;
+}
+
+/* Miscellaneous ===--------------------------------------------------------- */
+
+a.wildfire-overview-view-full {
+  display: block;
+  margin: 0px 0px 8px 8px;
+}
+
+.ajax-progress-throbber {
+  position: relative;
+}
+
+.ajax-progress-throbber .message {
+  display: none;
+  visibility: hidden;
+}
+
+.ajax-progress-throbber .throbber {
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 16px;
+  height: 16px;
+  background: url(images/ajax-loader-16.gif) top left no-repeat;
+}
+
+.defaultSkin .wysiwygToolbar {
+  white-space: normal;
+  padding: 5px;
+}
+.defaultSkin .wysiwygToolbar div {
+  margin: 0 0 0 1px;
+  display: inline-block;
+  white-space: normal;
+}
+
+.defaultSkin .wysiwygToolbar div div {
+  margin: 0;
+  padding: 0;
+  white-space: nowrap;
+  border: none;
+}
+.defaultSkin .wysiwygToolbar .mceColorPreview {
+  margin-left: 2px;
+  width: 16px;
+  height: 4px;
+  overflow: hidden;
+  background: #9A9B9A;
+  display: block;
+}
+.defaultSkin table.mceLayout {
+  border-radius: 5px;
+}
+.defaultSkin table.mceLayout tr.mceFirst td {
+  border-radius: 5px 5px 0 0;
+}
+.defaultSkin table.mceLayout tr.mceLast td {
+  border-radius: 0 0 5px 5px;
+}
+
+.vertical-tabs .vertical-tabs-list {
+  float: left;
+  width: 150px;
+  margin-left: -150px;
+}
+.vertical-tabs {
+  padding-left: 150px;
+  background-position: -50px 0;
+}
+.column-side .vertical-tabs select {
+  width: 192px;
+}
+ul.links.inline, ul.links.inline li, ul.links.inline li a {
+  display: inline;
+  float: none;
+  padding: 0 5px 0 0;
+}

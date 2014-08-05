@@ -1,0 +1,7 @@
+name = CAdmin
+description = Admin theme based on Rubik & Tao.
+base theme = rubik
+core = 7.x
+engine = phptemplate
+
+stylesheets[screen][] = cadmin.css
