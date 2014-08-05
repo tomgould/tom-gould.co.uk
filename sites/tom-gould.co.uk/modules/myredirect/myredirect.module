@@ -1,0 +1,64 @@
+<?php
+
+/**
+ * @file
+ * my redirect module, does some simple redirecting from old paths to new ones
+ */
+
+/**
+ * Checks the path and applies a redirect if required
+ */
+function myredirect_init() {
+  if ($_GET['q'] === 'tom-goulds-cv-as-a-web-page') {
+    myredirect_redirect('tom-gould-cv-as-a-web-page');
+  }
+
+
+  $parts = explode('/', drupal_get_path_alias($_GET['q']));
+  $part  = array_shift($parts);
+  switch ($part) {
+    case 'tags':
+    case 'seo-pages':
+    case 'seo-page':
+      myredirect_check_q($_GET['q'], $part);
+      break;
+    default:
+      break;
+  }
+}
+
+/**
+ * Checks the URL to see if we could have a redirect needed
+ *
+ * @param string $q
+ *   The sodding q
+ * @param part $part
+ *   The 1st sodding part of the URL
+ */
+function myredirect_check_q($q, $part) {
+  $item = menu_get_item($q);
+  if ($item === FALSE) {
+    switch ($part) {
+      case 'tags':
+        myredirect_redirect(str_replace('tags', 'skills', $q));
+        break;
+
+      case 'seo-pages':
+        myredirect_redirect(str_replace('seo-pages', 'tags', $q));
+        break;
+
+      case 'seo-page':
+        myredirect_redirect(str_replace('seo-page/', '', $q));
+        break;
+    }
+  }
+}
+
+/**
+ * Does a redirect if the q is for real bitch
+ *
+ * @param type $q
+ */
+function myredirect_redirect($q) {
+  drupal_goto($q);
+}

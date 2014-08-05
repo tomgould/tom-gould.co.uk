@@ -1,0 +1,37 @@
+<?php
+
+// $Id$
+
+/**
+ * Implementation of hook_install().
+ */
+function crosslink_install() {
+  drupal_load('module', 'taxonomy.module');
+  $t = get_t();
+
+  $vocabulary               = new stdClass();
+  $vocabulary->name         = 'Tags';
+  $vocabulary->machine_name = 'tags';
+  taxonomy_vocabulary_save($vocabulary);
+  $vid                      = $vocabulary->vid;
+
+  // define array to hold all terms' arrays
+  $crosslink_terms = array();
+
+  $terms = "APIs, AWS, Agile, Apache, BDD, CD, CI, CSS, Confluence, Context, Crucible, Ctools, Custom module development, Delivery, Drupal, Drush, Entity, Estimating, Git, Go, HTML, JSON, Java, JavaScript, Jenkins, Jira, Jquery, Leadership, Leverage of Contrib modules, Linux, Maven, MySQL, Nginx, Open Source, PHP, PHPUnit, Panels, Planning, SEO, SQL, SVN, Selenium, Simple Test, TDD, Theme Development, Ubuntu, Views, W3, Waterfall, XML";
+
+  $terms = explode(',', $terms);
+  foreach ($terms as $term) {
+    // add some terms to the terms array
+    $crosslink_terms[] = array(
+      'name'        => trim($term),
+      'vid'         => $vid,
+      'description' => $t(''),
+    );
+  }
+
+  // add terms to database
+  foreach ($crosslink_terms as $crosslink_term) {
+    taxonomy_term_save((object) $crosslink_term);
+  }
+}

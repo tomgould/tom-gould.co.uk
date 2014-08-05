@@ -1,0 +1,6 @@
+; $Id$
+name = Crosslink
+description = APopulates a vocab
+package = AAA SEO Crosslinks
+core = 7.x
+

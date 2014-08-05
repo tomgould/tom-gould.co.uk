@@ -1,0 +1,8 @@
+core = "7.x"
+dependencies[] = "rules_autotag"
+description = "Autotag Rules"
+features[rules_config][] = "rules_tag_about_us_fields"
+features[rules_config][] = "rules_tag_node_blog_body"
+name = "Autotag Rules"
+package = "Features"
+php = "5.2.4"

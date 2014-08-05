@@ -1,0 +1,27 @@
+<?php
+
+/**
+ * @file
+ * blank instyall file
+ */
+
+/**
+ * Implementation of hook_enable().
+ */
+function mymodule_enable() {
+
+}
+
+/**
+ * Implementation of hook_disable().
+ */
+function mymodule_disable() {
+
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function mymodule_uninstall() {
+
+}

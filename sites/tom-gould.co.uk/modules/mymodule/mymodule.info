@@ -1,0 +1,5 @@
+name = mymodule
+description = blank module for copy/pasting
+package = mymodule
+core = 7.x
+

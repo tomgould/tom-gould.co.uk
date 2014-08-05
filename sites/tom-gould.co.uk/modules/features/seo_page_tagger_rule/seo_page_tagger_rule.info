@@ -1,0 +1,9 @@
+name = SEO page tagger rule
+description = SEO page tagger rule
+core = 7.x
+package = Features
+dependencies[] = entity
+dependencies[] = rules
+dependencies[] = rules_autotag
+features[features_api][] = api:1
+features[rules_config][] = rules_tag_seo_node_body

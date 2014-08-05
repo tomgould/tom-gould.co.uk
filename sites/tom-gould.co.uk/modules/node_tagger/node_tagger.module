@@ -1,0 +1,282 @@
+<?php
+
+/**
+ * @file
+ * Links terms from the supplied taaxonomy list in the supplied text
+ */
+
+/**
+ * Implements hook_node_view()
+ */
+function node_tagger_node_view($node, $view_mode, $langcode) {
+
+  // For nodes with field_tags
+  if (!empty($node->field_tags[LANGUAGE_NONE])) {
+    $tags = array();
+    foreach ($node->field_tags[LANGUAGE_NONE] as $key => $value) {
+      $tags[] = taxonomy_term_load($value['tid']);
+    }
+
+    // Tag the body
+    node_tagger_tag($node->content['body'][0]['#markup'], $tags);
+  }
+
+  // For the about us page
+  if ($node->type == 'about_us') {
+    $tags = taxonomy_get_tree(1);
+    // Tag the body
+    node_tagger_tag($node->content['body'][0]['#markup'], $tags);
+    // Tag the fields
+    node_tagger_tag($node->content['field_column_one'][0]['#markup'], $tags);
+    node_tagger_tag($node->content['field_column_two'][0]['#markup'], $tags);
+    node_tagger_tag($node->content['field_column_three'][0]['#markup'], $tags);
+  }
+
+  // For SEO pages
+  if ($node->type == 'seo_page') {
+    $tags  = taxonomy_get_tree(1);
+    $terms = taxonomy_get_tree(2);
+
+    // Tag the body
+    node_tagger_tag($node->content['body'][0]['#markup'], $terms);
+    node_tagger_tag($node->content['body'][0]['#markup'], $tags);
+  }
+}
+
+/**
+ * Links the occurances of the terms in the terms array to the taxonoy page
+ * for that term from all occurances of that term in the supplied content.
+ *
+ * Removes the HTML tags and replaces them with IDs so that we dont link
+ * text in alt tags or within code blocks
+ *
+ * We will then loop back through the IDs and replace them with their
+ * corresponding html tags after the linking has been done.
+ *
+ * @param string $content
+ * @param array $terms
+ */
+function node_tagger_tag(&$content, $terms) {
+
+  // declare arrays & variables
+  $content        = ' ' . $content; // First character gets dropped
+  $ary_body       = explode('<', $content);
+  $ary_tags       = array();
+  $no_tags_string = '';
+
+  // array of identifiers where we want to do something different
+  // than the usual 1 tag = 1 ID processing
+  $exceptions = array('href', 'geshifilter');
+
+  // loop itteration (amount of tags)
+  $c = count($ary_body);
+
+  for ($i = 0; $i < $c; $i++) {
+
+    // the line from the array
+    $line = $ary_body[$i];
+
+    // call function to return elems of line
+    $elems     = node_tagger_return_elems($line);
+    $tag       = $elems['tag'];
+    $remainder = $elems['remainder'];
+
+
+    // What to do if an Anchor tag is found
+    if (strpos($tag, 'href') !== FALSE
+    ) {
+
+      // empty variable to hold entire anchor block
+      $whole_anchor  = '';
+      // need this for test later (will be apparent)
+      $must_subtract = FALSE;
+
+      while (strpos(strtolower($whole_anchor), '</a>') === FALSE) {
+        // the line from the array
+        $line = $ary_body[$i];
+
+        // call function to return elems of line
+        $elems     = node_tagger_return_elems($line);
+        $tag       = $elems['tag'];
+        $remainder = $elems['remainder'];
+
+        // whole anchor .= tag + remainder until </a> is found
+        $whole_anchor .= $tag . $remainder;
+
+        // itterate forward one itteration
+        $i = $i + 1;
+
+        // itteration bug fix
+        $must_subtract = TRUE;
+      }
+
+      // remove trailing remainder from whole_anchor
+      $whole_anchor = mb_substr(
+        $whole_anchor, 0, (mb_strlen($whole_anchor) - mb_strlen($remainder))
+      );
+
+      // subtract the last itteration + if set to do so coz outer
+      // loop will do this for us next time round
+      if ($must_subtract === TRUE) {
+        $i = $i - 1;
+      }
+
+      // build new string with no tags in it, just replacment IDs
+      $no_tags_string .= '((##' . $i . '##))' . $remainder;
+      // Save the TAG with the correct ID to reference the Tag ID
+      $ary_tags[$i] = $whole_anchor;
+    }
+    else {
+      // the line from the array
+      $line = $ary_body[$i];
+
+      // call function to return elems of line
+      $elems     = node_tagger_return_elems($line);
+      $tag       = $elems['tag'];
+      $remainder = $elems['remainder'];
+
+
+      // build new string with no tags in it, just replacment IDs
+      $no_tags_string .= '((##' . $i . '##))' . $remainder;
+      // Save the TAG with the correct ID to reference the Tag ID
+      $ary_tags[$i] = $tag;
+    }
+  }
+
+  /**
+   * for each term of the correct type do the replaces on the processed
+   * text with NO HTML in it
+   */
+  $link_vars = array(
+    'no_tags_string' => $no_tags_string,
+    'ary_tags'       => $ary_tags,
+    'i'              => $i,
+  );
+
+  foreach ($terms as $term) {
+    // Link the specific terms
+    $link_vars = node_tagger_link_terms($link_vars, $term->name, $term->tid);
+  }
+
+  $ary_tags       = $link_vars['ary_tags'];
+  $no_tags_string = $link_vars['no_tags_string'];
+
+  /**
+   * Loop back through the HTML IDs and replace them with the HTML elements
+   */
+  foreach ($ary_tags as $key => $value) {
+    $no_tags_string = str_replace(
+      '((##' . $key . '##))', $value, $no_tags_string
+    );
+  }
+
+  $content = $no_tags_string;
+}
+
+/**
+ * Returns tag and remainder of string for hook_node_view function
+ *
+ * @param string $str
+ * @return array
+ */
+function node_tagger_return_elems($str) {
+  $tag       = '';
+  $remainder = '';
+  // the HTML tag at the left of the line
+  $tag       = (mb_substr($str, 0, mb_strpos($str, '>')));
+  if (mb_strlen($tag) > 0) {
+    $tag = '<' . $tag . '>';
+  }
+  // the remainder of the line, after the HTML tag
+  if ((mb_strlen($str) - mb_strpos($str, '>') - 1 ) > 0) {
+    $remainder = (
+      mb_substr($str, (mb_strlen($str) - mb_strpos($str, '>') - 1) * -1)
+      );
+  }
+
+  $return              = array();
+  $return['tag']       = $tag;
+  $return['remainder'] = $remainder;
+
+  return $return;
+}
+
+/**
+ * Glossary Type Linker Function
+ *
+ * Returns the origional input with the first occurance of the term linked
+ * to the term taxonomy/term page
+ *
+ * @param array $link_vars
+ * @param string $name
+ * @param int $tid
+ *
+ * @return string
+ */
+function node_tagger_link_terms($link_vars, $name, $tid) {
+  $search_terms = array(
+    " " . $name . ".",
+    " " . $name . ",",
+    " " . $name . "?",
+    " " . $name . "!",
+    " " . $name . " ",
+  );
+
+  foreach ($search_terms as $search_term) {
+    if (mb_strlen(trim($search_term)) > 1) {
+      // Repeat untill all occurances are replaced
+      while (mb_strpos($link_vars['no_tags_string'], $search_term) !== FALSE) {
+        node_tagger_link_terms_worker($link_vars, $search_term, $tid);
+      }
+    }
+  }
+
+  return $link_vars;
+}
+
+/**
+ * Does the linking for the terms
+ *
+ * @param array $link_vars
+ * @param string $search_term
+ * @param int $tid
+ */
+function node_tagger_link_terms_worker(&$link_vars, $search_term, $tid) {
+  $start_pos = strpos($link_vars['no_tags_string'], $search_term);
+  if ($start_pos === FALSE) {
+    $start_pos = 0;
+  }
+
+  $search_term_length = strlen($search_term);
+  $full_str_length    = strlen($link_vars['no_tags_string']);
+
+  $str_01 = substr($link_vars['no_tags_string'], 0, $start_pos);
+  $str_02 = substr(
+    $link_vars['no_tags_string'], $start_pos, $search_term_length
+  );
+
+  if ($full_str_length - $start_pos - $search_term_length > 0) {
+    $str_03 = substr(
+      $link_vars['no_tags_string'], ($full_str_length - $start_pos - $search_term_length) * -1
+    );
+  }
+  else {
+    $str_03 = '';
+  }
+
+  // here we have a match so build the link, add it to the tags array
+  // replace the word with a ((##ID and increment the tags counter
+  $the_link = l(
+    '<strong class="normal">' . trim($str_02) . '</strong>', 'taxonomy/term/' . $tid, array('html' => TRUE)
+  );
+
+  // add the link to the return array
+  $link_vars['ary_tags'][$link_vars['i']] = $the_link;
+
+  // return the altered no tags string
+  $link_vars['no_tags_string'] = $str_01 . ' ((##' . $link_vars['i'] . '##)) ' . $str_03;
+  ;
+
+  // increment the tags count
+  $link_vars['i'] ++;
+}

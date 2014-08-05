@@ -1,0 +1,5 @@
+name = myredirect
+description = Custom module to redirect old paths to new ones
+package = myredirect
+core = 7.x
+
