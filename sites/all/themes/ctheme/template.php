@@ -78,7 +78,7 @@ function ctheme_process_html(&$vars) {
 
     $head_title = '';
     $i          = 0;
-    while (mb_strlen($head_title) + mb_strlen($words[$i]) + 1 <= 64) {
+    while (mb_strlen($head_title) + mb_strlen($words[$i]) + 1 <= 60) {
       $head_title = trim($head_title . ' ' . $words[$i]);
       $i++;
     }
