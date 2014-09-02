@@ -53,7 +53,7 @@ imce.hooks.load.push(function(win) {
     if (appFields.url.indexOf(',') > -1) {
       var arr = appFields.url.split(',');
       for (var i in arr) {
-        if ($('#'+ arr[i], appWindow.document).length) {
+        if ($('#'+ arr[i], appWindow.document).size()) {
           appFields.url = arr[i];
           break;
         }

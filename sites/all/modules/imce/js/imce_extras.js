@@ -180,7 +180,7 @@ imce.setResizer = function (resizer, axis, area1, area2, Min, callback) {
 //get&set area dimensions of the last session from the cookie
 imce.recallDimensions = function() {
   var $body = $(document.body);
-  if (!$body.hasClass('imce')) return;
+  if (!$body.is('.imce')) return;
   //row heights
   imce.recallHeights(imce.cookie('imcebwh') * 1);
   $(window).resize(function(){imce.recallHeights()});
@@ -214,9 +214,9 @@ imce.recallHeights = function(bwFixedHeight) {
 //cookie get & set
 imce.cookie = function (name, value) {
   if (typeof(value) == 'undefined') {//get
-    return document.cookie ? imce.decode((document.cookie.match(new RegExp('(?:^|;) *' + name + '=([^;]*)(?:;|$)')) || ['', ''])[1].replace(/\+/g, '%20')) : '';
+    return unescape((document.cookie.match(new RegExp('(^|;) *'+ name +'=([^;]*)(;|$)')) || ['', '', ''])[2]);
   }
-  document.cookie = name +'='+ encodeURIComponent(value) +'; expires='+ (new Date(new Date() * 1 + 15 * 86400000)).toUTCString() +'; path=' + Drupal.settings.basePath + 'imce';//set
+  document.cookie = name +'='+ escape(value) +'; expires='+ (new Date(new Date() * 1 + 15 * 86400000)).toGMTString() +'; path=' + Drupal.settings.basePath + 'imce';//set
 };
 
 //view thumbnails(smaller than tMaxW x tMaxH) inside the rows.
