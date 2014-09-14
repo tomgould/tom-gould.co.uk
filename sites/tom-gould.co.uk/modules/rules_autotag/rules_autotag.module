@@ -101,8 +101,10 @@ function rules_autotag_clean_term($text) {
  * Additionally content from CDATA tags is extracted and added to the text.
  */
 function rules_autotag_clean_text($text) {
-  preg_match_all('/<!\[CDATA\[(.*?)\]\]>/is', $text, $matches);
-  $text = str_replace($matches[0], $matches[1], $text);
+  $text = preg_replace('/<!\[CDATA\[(.*?)\]\]>/is', '$1', $text);
+  // strip_tags() does not introduce any white space for concatenated tags.
+  // Example: "<h1>Hello</h1>Body text here." would become "HelloBody text here."
+  $text = preg_replace('/(<[^>]+>)/', '$1 ', $text);
   $text = strip_tags($text);
   $text = drupal_strtolower($text);
   $text = trim($text);
@@ -219,12 +221,9 @@ function rules_autotag_exact_match($text, $vocabulary) {
   $matchings_term_splits = array_intersect_key($terms, $text_tokens);
 
   // Search for an exactly matching term name and return that immediately.
-  foreach ($matchings_term_splits as $name => $results) {
+  foreach ($matchings_term_splits as $results) {
     foreach ($results as $result) {
-      if ($name == $text) {
-        return $result['tid'];
-      }
-      if ($result['splitted'] && $result['original_term_name'] == $text) {
+      if ($result['original_term_name'] == $text) {
         return $result['tid'];
       }
     }

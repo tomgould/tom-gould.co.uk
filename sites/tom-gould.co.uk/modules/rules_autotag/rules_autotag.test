@@ -69,15 +69,37 @@ class RulesAutotagTestCase extends DrupalWebTestCase {
      $this->assertTrue(in_array($this->term5->tid, $tids), 'Term name with dashes found.');
 
      $this->assertEqual(rules_autotag_clean_text(' test '), 'test', 'Input text is trimmed before processing.');
+     $this->assertEqual(rules_autotag_clean_text('<![CDATA[test]]>'), 'test', 'CDATA tags get stripped correctly');
 
      $this->assertEqual(rules_autotag_split_text('1234 Test (XY)'), array('1234', 'Test', 'XY'), 'No empty strings in splitted text array.');
      $this->assertEqual(array_values(rules_autotag_split_text('"green cars"')), array('green', 'cars'), 'Quotes get splitted out correctly.');
      $this->assertEqual(rules_autotag_split_text('änderung macht spaß?'), array('änderung', 'macht', 'spaß'), 'Words with German umlauts get splitted correctly.');
+     $this->assertEqual(rules_autotag_split_text(rules_autotag_clean_text(
+       '<strong>Location</strong> <br/>Vienna<br /><strong>Start</strong> <br/>asap')),
+       array('location', 'vienna', 'start', 'asap'),
+       'Words separated by HTML tags get splittet correctly.'
+     );
+     $this->assertEqual(rules_autotag_split_text(rules_autotag_clean_text(
+       '<h1>Hello</h1>Body text here.')),
+       array('hello', 'body', 'text', 'here'),
+       'Words immediately after HTML tags get splittet correctly.'
+     );
+     $this->assertEqual(rules_autotag_split_text(rules_autotag_clean_text(
+       '<![CDATA[<h1>Hello</h1>Body text here.]]>')),
+       array('hello', 'body', 'text', 'here'),
+       'HTML in CDATA wrapper gets split up correctly.'
+     );
+
+     // Test that parts of a term name do not yield results.
+     $tids = rules_autotag_extract('Compound', $this->vocabulary);
+     $this->assertTrue(empty($tids), 'Text containing a part of a term has no results.');
 
      // Test exact matching.
      $tid = rules_autotag_exact_match('Term1 test', $this->vocabulary);
      $this->assertFalse($tid, 'Text containing the word is no exact match.');
      $tid = rules_autotag_exact_match('Term1 ', $this->vocabulary);
      $this->assertEqual($tid, $this->term1->tid, 'Exact match found.');
+     $tid = rules_autotag_exact_match('Compound', $this->vocabulary);
+     $this->assertFalse($tid, 'Text containing a part of a term is no exact match.');
   }
 }
