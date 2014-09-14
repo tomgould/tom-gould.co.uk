@@ -10,7 +10,7 @@
 function seo_pages_taxonomy_default_vocabularies() {
   return array(
     'terms' => array(
-      'name' => 'Terms',
+      'name' => 'SEO Tags',
       'machine_name' => 'terms',
       'description' => '',
       'hierarchy' => '0',

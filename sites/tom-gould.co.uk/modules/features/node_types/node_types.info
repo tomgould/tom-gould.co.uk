@@ -13,6 +13,7 @@ features[field][] = node-about_us-body
 features[field][] = node-about_us-field_column_one
 features[field][] = node-about_us-field_column_three
 features[field][] = node-about_us-field_column_two
+features[field][] = node-about_us-field_tags
 features[field][] = node-block_content-body
 features[field][] = node-blog-body
 features[field][] = node-blog-field_image

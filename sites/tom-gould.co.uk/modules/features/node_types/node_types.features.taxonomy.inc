@@ -10,7 +10,7 @@
 function node_types_taxonomy_default_vocabularies() {
   return array(
     'tags' => array(
-      'name' => 'Tags',
+      'name' => 'Skills',
       'machine_name' => 'tags',
       'description' => '',
       'hierarchy' => '0',
