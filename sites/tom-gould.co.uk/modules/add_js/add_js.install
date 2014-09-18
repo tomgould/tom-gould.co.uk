@@ -1,0 +1,59 @@
+<?php
+/**
+ * @file
+ *   Install file for the add_js module. Creates required table
+ */
+
+/**
+ * Implementation of hook_scheme().
+ */
+function add_js_schema() {
+  $schema                  = array();
+  $schema['add_js'] = array(
+    'description' => 'Stores the data for the add_js module',
+    'fields'      => array(
+      'id'      => array(
+        'description' => 'The primary identifier for a js record.',
+        'type'        => 'serial',
+        'unsigned'    => TRUE,
+        'not null'    => TRUE,
+      ),
+      'title'   => array(
+        'type'        => 'varchar',
+        'length'      => '255',
+        'description' => 'The title of the JS.',
+      ),
+      'usage_option' => array(
+        'type'        => 'int',
+        'unsigned'    => TRUE,
+        'not null'    => TRUE,
+        'description' => 'The interger representation of the usage option for this JS.',
+      ),
+      'scope'        => array(
+        'type'        => 'varchar',
+        'length'      => '6',
+        'not null'    => TRUE,
+        'description' => 'The scope parameter in drupal_add_js',
+      ),
+      'javascript' => array(
+        'description' => 'The JavaScript to be added to the page.',
+        'type'        => 'text',
+        'not null'    => TRUE,
+        'size'        => 'big'
+      ),
+      'paths'        => array(
+        'description' => 'Serialised array or drupal paths',
+        'type'        => 'text',
+        'not null'    => TRUE,
+        'size'        => 'big'
+      ),
+    ),
+    'primary key' => array('id'),
+    'indexes'     => array(
+      'usage_option' => array('usage_option'),
+      'title'        => array('title'),
+    ),
+  );
+
+  return $schema;
+}

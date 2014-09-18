@@ -1,0 +1,4 @@
+name = Add JS
+description = "Allows the admin user to add JavaScript to pages form the admin UI"
+package = Add JS
+core = 7.x
