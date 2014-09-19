@@ -362,8 +362,11 @@ function crosslink_tag_all_pages($nid = FALSE) {
 /**
  * Implementation of hook_perm().
  */
-function crosslink_perm() {
-  return array('administer crosslink');
+function crosslink_permission() {
+  $permissions['administer crosslink'] = array(
+    'title' => t('Administer the Cross Links module'),
+  );
+  return $permissions;
 }
 
 /**

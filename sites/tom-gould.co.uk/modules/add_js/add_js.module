@@ -115,14 +115,14 @@ function add_js_menu() {
   $items[ADD_JS_LIST_PATH]        = array(
     'title'           => t('Add JS'),
     'page callback'   => 'add_js_list',
-    'access callback' => 'add_js_user_is_admin',
+    'access arguments' => array('administer add js'),
     'type'            => MENU_NORMAL_ITEM,
   );
   $items[ADD_JS_ADD_PATH]         = array(
     'title'           => t('Add New JavaScript to pages'),
     'page callback'   => 'drupal_get_form',
     'page arguments'  => array('add_js_add_new_js_form'),
-    'access callback' => 'add_js_user_is_admin',
+    'access arguments' => array('administer add js'),
     'type'            => MENU_NORMAL_ITEM,
   );
   $items['admin/config/add-js/edit/%']   = array(
@@ -131,7 +131,7 @@ function add_js_menu() {
     'title arguments' => array(4, t('Edit')),
     'page callback'   => 'drupal_get_form',
     'page arguments'  => array('add_js_edit_existing_js_form', 4),
-    'access callback' => 'add_js_user_is_admin',
+    'access arguments' => array('administer add js'),
     'type'            => MENU_CALLBACK,
   );
   $items['admin/config/add-js/delete/%'] = array(
@@ -140,7 +140,7 @@ function add_js_menu() {
     'title arguments' => array(4, t('Delete')),
     'page callback'   => 'drupal_get_form',
     'page arguments'  => array('add_js_delete_existing_js_form', 4),
-    'access callback' => 'add_js_user_is_admin',
+    'access arguments' => array('administer add js'),
     'type'            => MENU_CALLBACK,
   );
 
@@ -148,16 +148,13 @@ function add_js_menu() {
 }
 
 /**
- * Access callback allows only user 1 to use this module.
- *
- * @global object $user
- *
- * @return bool
+ * Implementation of hook_permission().
  */
-function add_js_user_is_admin() {
-  global $user;
-
-  return $user->uid == 1;
+function add_js_permission() {
+  $permissions['administer add js'] = array(
+    'title' => t('Administer Add JS Module'),
+  );
+  return $permissions;
 }
 
 /**
