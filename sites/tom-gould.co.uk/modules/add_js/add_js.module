@@ -38,7 +38,7 @@ function add_js_usage_option_text($value) {
  */
 function add_js_preprocess_page(&$variables) {
   $query  = db_select('add_js', 'js');
-  $query->fields('js', array('id', 'title', 'usage_option', 'scope', 'javascript', 'paths'));
+  $query->fields('js', array('id', 'title', 'usage_option', 'scope', 'weight', 'javascript', 'paths'));
   $result = $query->orderBy('js.id')->execute();
 
   $path  = current_path();
@@ -55,8 +55,9 @@ function add_js_preprocess_page(&$variables) {
       case ADD_JS_USE_ON_ALL :
         drupal_add_js(
           $comment . $row->javascript, array(
-          'type'  => 'inline',
-          'scope' => $row->scope
+          'type'   => 'inline',
+          'scope'  => $row->scope,
+          'weight' => $row->weight,
           )
         );
         break;
@@ -65,8 +66,9 @@ function add_js_preprocess_page(&$variables) {
         if (empty($paths[$path]) && empty($paths[$alias]) && empty($paths[$uri])) {
           drupal_add_js(
             $comment . $row->javascript, array(
-            'type'  => 'inline',
-            'scope' => $row->scope
+            'type'   => 'inline',
+            'scope'  => $row->scope,
+            'weight' => $row->weight,
             )
           );
         }
@@ -76,8 +78,9 @@ function add_js_preprocess_page(&$variables) {
         if (!empty($paths[$path]) || !empty($paths[$alias]) || !empty($paths[$uri])) {
           drupal_add_js(
             $comment . $row->javascript, array(
-            'type'  => 'inline',
-            'scope' => $row->scope
+            'type'   => 'inline',
+            'scope'  => $row->scope,
+            'weight' => $row->weight,
             )
           );
         }
@@ -218,6 +221,7 @@ function _add_js_retrieve_list_header() {
     array('data' => t('Title')),
     array('data' => t('Usage Option')),
     array('data' => t('Scope')),
+    array('data' => t('Weight')),
     array('data' => t('Edit')),
     array('data' => t('Delete')),
   );
@@ -232,7 +236,7 @@ function _add_js_retrieve_list_header() {
  */
 function _add_js_retrieve_list_rows() {
   $query = db_select('add_js', 'js')->extend('PagerDefault');
-  $query->fields('js', array('id', 'title', 'usage_option', 'scope'));
+  $query->fields('js', array('id', 'title', 'usage_option', 'scope', 'weight'));
   $result = $query->limit(50)->orderBy('js.id')->execute();
 
   $rows = array();
@@ -240,10 +244,11 @@ function _add_js_retrieve_list_rows() {
     $title  = $row->title;
     $option = add_js_usage_option_text($row->usage_option);
     $scope  = $row->scope;
+    $weight = $row->weight;
     $edit   = l('Edit', 'admin/config/add-js/edit/' . $row->id);
     $delete = l('Delete', 'admin/config/add-js/delete/' . $row->id);
 
-    $rows[] = array($title, $option, $scope, $edit, $delete);
+    $rows[] = array($title, $option, $scope, $weight, $edit, $delete);
   }
 
   return $rows;
@@ -291,6 +296,14 @@ function add_js_add_new_js_form($form, &$form_state) {
     '#required'      => TRUE,
   );
 
+  $form['weight'] = array(
+    '#type'          => 'textfield',
+    '#title'         => t('Weight'),
+    '#description'   => t('Optional numeric weight value used in drupal_add_js'),
+    '#default_value' => NULL,
+    '#required'      => FALSE,
+  );
+
   // Add radio to choose usage option
   $form['usage_option'] = array(
     '#type'          => 'radios',
@@ -336,7 +349,7 @@ function add_js_add_new_js_form($form, &$form_state) {
  */
 function add_js_add_new_js_form_validate(&$form, &$form_state) {
   // The title and JavaScript fields are mandatory so are already taken care of
-  // The only other validation is on the Usage Options & Paths combination
+  // The only other validation is on the Usage Options, Weight & Paths combination
   // If this is for use on specified pages only make sure the paths
   // value is not empty
   if (
@@ -346,6 +359,12 @@ function add_js_add_new_js_form_validate(&$form, &$form_state) {
     if (mb_strlen(trim($form_state['values']['paths'])) == 0) {
       form_set_error('paths', t('If this is for use on specified pages only '
           . 'make sure the paths textarea is not empty'));
+    }
+  }
+
+  if (!empty($form_state['values']['weight'])) {
+    if (!is_numeric($form_state['values']['weight'])) {
+      form_set_error('weight', t('The weight value must be numeric.'));
     }
   }
 }
@@ -363,6 +382,7 @@ function add_js_add_new_js_form_submit(&$form, &$form_state) {
   $title      = $form_state['values']['title'];
   $javascript = $form_state['values']['javascript'];
   $scope      = $form_state['values']['scope'];
+  $weight     = $form_state['values']['weight'];
   $option     = $form_state['values']['usage_option'];
   $paths      = $form_state['values']['paths'];
 
@@ -371,6 +391,7 @@ function add_js_add_new_js_form_submit(&$form, &$form_state) {
       'title'        => $title,
       'usage_option' => $option,
       'scope'        => $scope,
+      'weight'       => $weight,
       'javascript'   => $javascript,
       'paths'        => $paths,
     ))
@@ -396,7 +417,7 @@ function add_js_edit_existing_js_form($form, &$form_state, $id) {
   $form_state['storage']['add_js_id'] = $id;
 
   $query    = db_select('add_js', 'js');
-  $query->fields('js', array('id', 'title', 'usage_option', 'scope', 'javascript', 'paths'));
+  $query->fields('js', array('id', 'title', 'usage_option', 'scope', 'weight', 'javascript', 'paths'));
   $existing = $query->condition('id', $id)->execute()->fetchAssoc();
 
   $form = array();
@@ -429,6 +450,14 @@ function add_js_edit_existing_js_form($form, &$form_state, $id) {
     ),
     '#default_value' => $existing['scope'],
     '#required'      => TRUE,
+  );
+
+  $form['weight'] = array(
+    '#type'          => 'textfield',
+    '#title'         => t('Weight'),
+    '#description'   => t('Optional numeric weight value used in drupal_add_js'),
+    '#default_value' => $existing['weight'],
+    '#required'      => FALSE,
   );
 
   // Add radio to choose usage option
@@ -484,6 +513,7 @@ function add_js_edit_existing_js_form_submit(&$form, &$form_state) {
   $javascript = $form_state['values']['javascript'];
   $option     = $form_state['values']['usage_option'];
   $scope      = $form_state['values']['scope'];
+  $weight     = $form_state['values']['weight'];
   $paths      = $form_state['values']['paths'];
 
   db_update('add_js')
@@ -492,6 +522,7 @@ function add_js_edit_existing_js_form_submit(&$form, &$form_state) {
       'javascript'   => $javascript,
       'usage_option' => $option,
       'scope'        => $scope,
+      'weight'       => $weight,
       'paths'        => $paths,
     ))
     ->condition('id', $id)

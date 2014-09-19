@@ -35,6 +35,12 @@ function add_js_schema() {
         'not null'    => TRUE,
         'description' => 'The scope parameter in drupal_add_js',
       ),
+      'weight'       => array(
+        'type'        => 'varchar',
+        'length'      => '10',
+        'not null'    => FALSE,
+        'description' => 'The numeric value used for the weight option in drupal_add_js.',
+      ),
       'javascript' => array(
         'description' => 'The JavaScript to be added to the page.',
         'type'        => 'text',
