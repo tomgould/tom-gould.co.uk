@@ -770,9 +770,10 @@ function _webform_submit_component($component, $value) {
  */
 function _webform_delete_component($component, $value) {
   // Delete corresponding files when a submission is deleted.
-  if (!empty($value[0]) && ($file = webform_get_file($value[0]))) {
-    file_usage_delete($file, 'webform');
-    file_delete($file);
+  $filedata = unserialize($value['0']);
+  if (isset($filedata['filepath']) && is_file($filedata['filepath'])) {
+    unlink($filedata['filepath']);
+    db_query("DELETE FROM {files} WHERE filepath = '%s'", $filedata['filepath']);
   }
 }
 

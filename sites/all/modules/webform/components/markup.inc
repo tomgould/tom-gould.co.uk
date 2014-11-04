@@ -66,6 +66,9 @@ function _webform_render_markup($component, $value = NULL, $filter = TRUE) {
     '#translatable' => array('title', 'markup'),
   );
 
+  // TODO: Remove when #markup becomes available in D7.
+  $element['#value'] = $element['#markup'];
+
   return $element;
 }
 
