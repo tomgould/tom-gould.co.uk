@@ -41,13 +41,6 @@ function add_js_preprocess_page(&$variables) {
   $query->fields('js', array('id', 'title', 'usage_option', 'scope', 'weight', 'javascript', 'paths'));
   $result = $query->orderBy('js.id')->execute();
 
-  $path  = current_path();
-  $alias = drupal_get_path_alias($path);
-  $uri   = $_SERVER['REQUEST_URI'];
-  if ($uri === '/') {
-    $uri = '<front>';
-  }
-
   foreach ($result as $row) {
   // Make a comme cnt for the JS to make it easier to identify in the source
   $comment = "//Add js: $row->title \n";
@@ -62,8 +55,8 @@ function add_js_preprocess_page(&$variables) {
         );
         break;
       case ADD_JS_USE_ON_ALL_EXCEPT :
-        $paths = add_js_get_paths_array($row->paths);
-        if (empty($paths[$path]) && empty($paths[$alias]) && empty($paths[$uri])) {
+        $page_match = add_js_match_paths_to_current_path($row->paths);
+        if ($page_match === FALSE) {
           drupal_add_js(
             $comment . $row->javascript, array(
             'type'   => 'inline',
@@ -74,8 +67,8 @@ function add_js_preprocess_page(&$variables) {
         }
         break;
       case ADD_JS_USE_ONLY_ON :
-        $paths = add_js_get_paths_array($row->paths);
-        if (!empty($paths[$path]) || !empty($paths[$alias]) || !empty($paths[$uri])) {
+        $page_match = add_js_match_paths_to_current_path($row->paths);
+        if ($page_match === TRUE) {
           drupal_add_js(
             $comment . $row->javascript, array(
             'type'   => 'inline',
@@ -90,20 +83,27 @@ function add_js_preprocess_page(&$variables) {
 }
 
 /**
- * Converts the paths filed in the database to an array
+ * Matches the current path to the paths on this javascript entry
+ * Functionlay similar to how blocks works
  *
  * @param string $paths
  *
- * @return array
+ * @return bool
  */
-function add_js_get_paths_array($paths) {
-  $array = explode("\n", $paths);
-  $return_array = array();
-  foreach ($array as $value) {
-    $return_array[trim($value)] = trim($value);
+function add_js_match_paths_to_current_path($paths) {
+  if (!empty($paths)) {
+    $pages      = drupal_strtolower($paths);
+    $path       = drupal_strtolower(drupal_get_path_alias($_GET['q']));
+    $page_match = drupal_match_path($path, $pages);
+    if ($path != $_GET['q']) {
+      $page_match = $page_match || drupal_match_path($_GET['q'], $pages);
+    }
+  }
+  else {
+    $page_match = TRUE;
   }
 
-  return $return_array;
+  return (bool) $page_match;
 }
 
 /**
