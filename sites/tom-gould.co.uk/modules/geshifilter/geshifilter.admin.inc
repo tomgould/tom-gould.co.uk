@@ -148,7 +148,7 @@ function geshifilter_admin_general_settings($form, &$form_state) {
       '#type' => 'checkbox',
       '#title' => t('Use built-in PHP function <code>highlight_string()</code> for PHP source code.'),
       '#description' => t('When enabled, PHP source code will be syntax highlighted with the built-in PHP function <code><a href="!highlight_string">highlight_string()</a></code> instead of with the GeSHi library. GeSHi features, like line numbering and usage of an external CSS stylesheet for example, are not available.',
-        array('!highlight_string' => 'http://php.net/manual/en/function.highlight-string.php')),
+        array('!highlight_string' => 'http://www.php.net/manual/en/function.highlight-string.php')),
       '#default_value' => variable_get('geshifilter_use_highlight_string_for_php', FALSE),
     );
     // Option to disable Keyword URL's
