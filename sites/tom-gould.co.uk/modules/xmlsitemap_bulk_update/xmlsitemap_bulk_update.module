@@ -1,0 +1,96 @@
+<?php
+
+/**
+ * @file
+ *   Provides a method or adding or excludin all the available items to your
+ *   sitemap from one page
+ */
+
+/**
+ * implements hook_menu();
+ * 
+ * @return array
+ */
+function xmlsitemap_bulk_update_menu() {
+  $items['admin/config/search/xmlsitemap/bulk-update'] = array(
+    'title'            => 'Bulk Update',
+    'page callback'    => 'drupal_get_form',
+    'page arguments'   => array('xmlsitemap_bulk_update_settings_form'),
+    'access arguments' => array('administer xmlsitemap'),
+    'type'             => MENU_LOCAL_TASK,
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_form();
+ * 
+ * @param array $form_state
+ */
+function xmlsitemap_bulk_update_settings_form() {
+  $entities = xmlsitemap_get_link_info(NULL, TRUE);
+  module_load_all_includes('inc', 'xmlsitemap');
+  foreach ($entities as $entity => $entity_info) {
+    $form[$entity] = array(
+      '#type'        => 'fieldset',
+      '#title'       => $entity_info['label'],
+      '#collapsible' => false,
+      '#group'       => 'xmlsitemap_settings',
+    );
+
+    if (!empty($entity_info['bundles'])) {
+      foreach ($entity_info['bundles'] as $bundle => $bundle_info) {
+        $status                                 = $bundle_info['xmlsitemap']['status'];
+        $form[$entity][$entity . '|' . $bundle] = xmlsitemap_bulk_update_get_checkbox($bundle_info['label'], $status);
+      }
+    }
+
+    $form[$entity]['#access'] = (bool) element_get_visible_children($form[$entity]);
+  }
+
+  $form['submit'] = array(
+    '#type'   => 'submit',
+    '#value' => t("Bulk Update :)"),
+  );
+
+  return $form;
+}
+
+/**
+ * Returns a simple checkbox element array
+ *
+ * @param string $title
+ * @param string $status
+ * @return array
+ */
+function xmlsitemap_bulk_update_get_checkbox($title, $status) {
+  return array(
+    '#type'          => 'checkbox',
+    '#title'         => $title,
+    '#default_value' => $status,
+  );
+}
+
+/**
+ * Implements hook_form_submit();
+ *
+ * Calls the xmlsitemap_link_bundle_settings_save function to include or
+ * exclude each available item in the sitemap
+ *
+ * @param array $form
+ * @param array $form_state
+ */
+function xmlsitemap_bulk_update_settings_form_submit(&$form, &$form_state) {
+  $values = $form_state['values'];
+  foreach ($values as $key => $value) {
+    if (mb_strpos($key, '|', 0) !== FALSE) {
+      $entitiy_info = explode('|', $key);
+      $settings     = array(
+        'status'   => (string) $value,
+        'priority' => '0.5',
+      );
+      xmlsitemap_link_bundle_settings_save($entitiy_info[0], $entitiy_info[1], $settings, TRUE);
+    }
+  }
+}
