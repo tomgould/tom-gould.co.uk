@@ -172,6 +172,7 @@ function add_js_permission() {
 function add_js_title_callback($js_id, $action) {
   $query  = db_select('add_js', 'js');
   $query->addField('js', 'title');
+  $query->condition('id', $js_id);
   $title = $query->execute()->fetchField();
 
   return t(
