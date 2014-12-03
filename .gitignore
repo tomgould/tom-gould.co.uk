@@ -2,6 +2,7 @@
 sites/*/settings*.php
 owa/owa-config.php
 owa/owa-data/*
+owa/install.php
 
 # Ignore paths that contain user-generated content.
 sites/*/private
