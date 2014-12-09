@@ -4,25 +4,21 @@
  * @file
  * XML sitemap integration functions for xmlsitemap.module.
  */
-class XMLSitemapException extends Exception {
 
-}
+class XMLSitemapException extends Exception {}
 
-class XMLSitemapGenerationException extends XMLSitemapException {
-
-}
+class XMLSitemapGenerationException extends XMLSitemapException {}
 
 /**
  * Extended class for writing XML sitemap files.
  */
 class XMLSitemapWriter extends XMLWriter {
-
-  protected $uri                 = NULL;
+  protected $uri = NULL;
   protected $sitemapElementCount = 0;
-  protected $linkCountFlush      = 500;
-  protected $sitemap             = NULL;
-  protected $sitemap_page        = NULL;
-  protected $rootElement         = 'urlset';
+  protected $linkCountFlush = 500;
+  protected $sitemap = NULL;
+  protected $sitemap_page = NULL;
+  protected $rootElement = 'urlset';
 
   /**
    * Constructor.
@@ -33,9 +29,9 @@ class XMLSitemapWriter extends XMLWriter {
    *   The current page of the sitemap being generated.
    */
   function __construct(stdClass $sitemap, $page) {
-    $this->sitemap      = $sitemap;
+    $this->sitemap = $sitemap;
     $this->sitemap_page = $page;
-    $this->uri          = xmlsitemap_sitemap_get_file($sitemap, $page);
+    $this->uri = xmlsitemap_sitemap_get_file($sitemap, $page);
     $this->openUri($this->uri);
   }
 
@@ -60,11 +56,25 @@ class XMLSitemapWriter extends XMLWriter {
     return $result;
   }
 
+  public function getSitemapUrl($path, array $options = array()) {
+    $options += $this->sitemap->uri['options'];
+    $options += array(
+      'absolute' => TRUE,
+      'base_url' => variable_get('xmlsitemap_base_url', $GLOBALS['base_url']),
+      'language' => language_default(),
+      'alias' => TRUE,
+    );
+    if (!empty($options['protocol_relative'])) {
+      $options['base_url'] = preg_replace('~^https?:~', '', $options['base_url']);
+    }
+    return url($path, $options);
+  }
+
   /**
    * Add the XML stylesheet to the XML page.
    */
   public function writeXSL() {
-    $this->writePi('xml-stylesheet', 'type="text/xsl" href="' . url('sitemap.xsl', $this->sitemap->uri['options']) . '"');
+    $this->writePi('xml-stylesheet', 'type="text/xsl" href="' . $this->getSitemapUrl('sitemap.xsl', array('protocol_relative' => TRUE)) . '"');
     $this->writeRaw(PHP_EOL);
   }
 
@@ -74,9 +84,12 @@ class XMLSitemapWriter extends XMLWriter {
   public function getRootAttributes() {
     $attributes['xmlns'] = 'http://www.sitemaps.org/schemas/sitemap/0.9';
     if (variable_get('xmlsitemap_developer_mode', 0)) {
-      $attributes['xmlns:xsi']          = 'http://www.w3.org/2001/XMLSchema-instance';
+      $attributes['xmlns:xsi'] = 'http://www.w3.org/2001/XMLSchema-instance';
       $attributes['xsi:schemaLocation'] = 'http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd';
     }
+
+    drupal_alter('xmlsitemap_root_attributes', $attributes, $this->sitemap);
+
     return $attributes;
   }
 
@@ -118,17 +131,20 @@ class XMLSitemapWriter extends XMLWriter {
   /**
    * Write full element tag including support for nested elements.
    *
-   * @param $name
+   * @param string $name
    *   The element name.
-   * @param $content
+   * @param string|array $content
    *   The element contents or an array of the elements' sub-elements.
+   *
+   * @todo Missing a return value since XMLWriter::writeElement() has one.
    */
-  public function writeElement($name, $content = '') {
+  public function writeElement($name, $content = NULL) {
     if (is_array($content)) {
       $this->startElement($name);
-      foreach ($content as $sub_name => $sub_content) {
-        $this->writeElement($sub_name, $sub_content);
-      }
+      $xml_content = format_xml_elements($content);
+      // Remove additional spaces from the output.
+      $xml_content = str_replace(array(" <", ">\n"), array("<", ">"), $xml_content);
+      $this->writeRaw($xml_content);
       $this->endElement();
     }
     else {
@@ -155,17 +171,12 @@ class XMLSitemapWriter extends XMLWriter {
     //  $file_gz = $file . '.gz';
     //  file_put_contents($file_gz, gzencode(file_get_contents($file), 9));
     //}
-//    if (!filesize($this->uri)) {
-//      throw new XMLSitemapGenerationException(t('Generated @file resulted in an empty file.', array('@file' => $this->uri)));
-//    }
 
     return $return;
   }
-
 }
 
 class XMLSitemapIndexWriter extends XMLSitemapWriter {
-
   protected $rootElement = 'sitemapindex';
 
   function __construct(stdClass $sitemap, $page = 'index') {
@@ -175,34 +186,27 @@ class XMLSitemapIndexWriter extends XMLSitemapWriter {
   public function getRootAttributes() {
     $attributes['xmlns'] = 'http://www.sitemaps.org/schemas/sitemap/0.9';
     if (variable_get('xmlsitemap_developer_mode', 0)) {
-      $attributes['xmlns:xsi']          = 'http://www.w3.org/2001/XMLSchema-instance';
+      $attributes['xmlns:xsi'] = 'http://www.w3.org/2001/XMLSchema-instance';
       $attributes['xsi:schemaLocation'] = 'http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd';
     }
+
+    drupal_alter('xmlsitemap_root_attributes', $attributes, $this->sitemap);
+
     return $attributes;
   }
 
   public function generateXML() {
     $lastmod_format = variable_get('xmlsitemap_lastmod_format', XMLSITEMAP_LASTMOD_MEDIUM);
 
-    $url_options = $this->sitemap->uri['options'];
-    $url_options += array(
-      'absolute' => TRUE,
-      'base_url' => variable_get('xmlsitemap_base_url', $GLOBALS['base_url']),
-      'language' => language_default(),
-      'alias'    => TRUE,
-    );
-
     for ($i = 1; $i <= $this->sitemap->chunks; $i++) {
-      $url_options['query']['page'] = $i;
-      $element                      = array(
-        'loc'     => url('sitemap.xml', $url_options),
+      $element = array(
+        'loc' => $this->getSitemapUrl('sitemap.xml', array('query' => array('page' => $i))),
         // @todo Use the actual lastmod value of the chunk file.
         'lastmod' => gmdate($lastmod_format, REQUEST_TIME),
       );
       $this->writeSitemapElement('sitemap', $element);
     }
   }
-
 }
 
 /**
@@ -211,7 +215,7 @@ class XMLSitemapIndexWriter extends XMLSitemapWriter {
 function xmlsitemap_xmlsitemap_link_info() {
   return array(
     'frontpage' => array(
-      'label'      => t('Frontpage'),
+      'label' => t('Frontpage'),
       'xmlsitemap' => array(
         'settings callback' => 'xmlsitemap_link_frontpage_settings',
       ),
@@ -227,16 +231,16 @@ function xmlsitemap_link_frontpage_settings(&$form) {
   if (user_access('administer site configuration')) {
     $form['#description'] = t('The front page path can be changed in the <a href="@url-frontpage">site information configuration</a>.', array('@url-frontpage' => url('admin/config/system/site-information')));
   }
-  $form['xmlsitemap_frontpage_priority']   = array(
-    '#type'          => 'select',
-    '#title'         => t('Priority'),
-    '#options'       => xmlsitemap_get_priority_options(),
+  $form['xmlsitemap_frontpage_priority'] = array(
+    '#type' => 'select',
+    '#title' => t('Priority'),
+    '#options' => xmlsitemap_get_priority_options(),
     '#default_value' => variable_get('xmlsitemap_frontpage_priority', 1.0),
   );
   $form['xmlsitemap_frontpage_changefreq'] = array(
-    '#type'          => 'select',
-    '#title'         => t('Change frequency'),
-    '#options'       => xmlsitemap_get_changefreq_options(),
+    '#type' => 'select',
+    '#title' => t('Change frequency'),
+    '#options' => xmlsitemap_get_changefreq_options(),
     '#default_value' => variable_get('xmlsitemap_frontpage_changefreq', XMLSITEMAP_FREQUENCY_DAILY),
   );
   return $form;
@@ -248,7 +252,7 @@ function xmlsitemap_link_frontpage_settings(&$form) {
 function xmlsitemap_xmlsitemap_link_alter(&$link) {
   // Alter the frontpage priority.
   if ($link['type'] == 'frontpage' || $link['loc'] == '' || $link['loc'] == variable_get('site_frontpage', 'node')) {
-    $link['priority']   = variable_get('xmlsitemap_frontpage_priority', 1.0);
+    $link['priority'] = variable_get('xmlsitemap_frontpage_priority', 1.0);
     $link['changefreq'] = variable_get('xmlsitemap_frontpage_changefreq', XMLSITEMAP_FREQUENCY_DAILY);
   }
 }
@@ -260,8 +264,8 @@ function xmlsitemap_xmlsitemap_links() {
   // Frontpage link.
   $links[] = array(
     'type' => 'frontpage',
-    'id'   => 0,
-    'loc'  => '',
+    'id' => 0,
+    'loc' => '',
   );
   return $links;
 }
@@ -271,9 +275,9 @@ function xmlsitemap_xmlsitemap_links() {
  */
 function xmlsitemap_xmlsitemap_sitemap_operations() {
   $operations['update'] = array(
-    'label'       => t('Update cached files'),
+    'label' => t('Update cached files'),
     'action past' => t('Updated'),
-    'callback'    => 'xmlsitemap_sitemap_multiple_update',
+    'callback' => 'xmlsitemap_sitemap_multiple_update',
   );
   return $operations;
 }
@@ -297,7 +301,7 @@ function xmlsitemap_sitemap_multiple_update(array $smids) {
  */
 function xmlsitemap_query_xmlsitemap_link_bundle_access_alter(QueryAlterableInterface $query) {
   if ($query instanceof EntityFieldQuery && $entity = $query->getMetaData('entity')) {
-    $info   = $query->getMetaData('entity_info');
+    $info = $query->getMetaData('entity_info');
     $bundle = $query->getMetaData('bundle');
     if (empty($bundle)) {
       $bundle = xmlsitemap_get_link_type_enabled_bundles($entity);
