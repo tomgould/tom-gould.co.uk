@@ -16,3 +16,7 @@ databases/*
 #Ignore netbeans stuff
 nbproject/*
 .idea/*
+
+#Raddon stuff
+ringtone.mp3
+
