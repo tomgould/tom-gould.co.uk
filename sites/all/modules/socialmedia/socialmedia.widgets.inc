@@ -28,15 +28,89 @@ function socialmedia_widgets_element_info() {
   );
   
   // AddThis advanced widgets
-  $elements = array_merge($elements, socialmedia_widgets_element_addthis_addthis_counter()); 
-  $elements = array_merge($elements, socialmedia_widgets_element_addthis_email());
-  $elements = array_merge($elements, socialmedia_widgets_element_addthis_facebook_like());  
-  $elements = array_merge($elements, socialmedia_widgets_element_addthis_google_plusone()); 
-  $elements = array_merge($elements, socialmedia_widgets_element_addthis_pinterest_pinit());    
-  $elements = array_merge($elements, socialmedia_widgets_element_addthis_stumbleupon_badge());
-  $elements = array_merge($elements, socialmedia_widgets_element_addthis_tweet());  
-  
-  
+  $addthis_js = socialmedia_widgets_element_addthis_js();
+  $defaults = array(
+    'add_js' => array(
+      'data' => $addthis_js,
+      'options' => array(
+        'scope' => 'set_post',
+      ),
+    ),
+    'form callback' => 'widgets_template_auto_form',
+  );
+  $elements = array_merge($elements, socialmedia_widgets_element_addthis_addthis_counter($defaults));
+  $elements = array_merge($elements, socialmedia_widgets_element_addthis_email($defaults));
+  $elements = array_merge($elements, socialmedia_widgets_element_addthis_facebook_like($defaults));
+  $elements = array_merge($elements, socialmedia_widgets_element_addthis_facebook_share_simple($defaults));
+  $elements = array_merge($elements, socialmedia_widgets_element_addthis_google_plusone($defaults));
+  $elements = array_merge($elements, socialmedia_widgets_element_addthis_google_share_simple($defaults));
+  $elements = array_merge($elements, socialmedia_widgets_element_addthis_linkedin_share_simple($defaults));
+  $elements = array_merge($elements, socialmedia_widgets_element_addthis_pinterest_pinit($defaults));
+  $elements = array_merge($elements, socialmedia_widgets_element_addthis_pinterest_share_simple($defaults));
+  $elements = array_merge($elements, socialmedia_widgets_element_addthis_stumbleupon_badge($defaults));
+  $elements = array_merge($elements, socialmedia_widgets_element_addthis_tweet($defaults));
+  $elements = array_merge($elements, socialmedia_widgets_element_addthis_tweet_simple($defaults));
+
+  // AddThis follow buttons
+  $elements['socialmedia_addthis-facebook-follow'] = array(
+      'label' => t('AddThis Facebook follow'),
+      'help' => t(''),
+      'group' => t('Social media: Facebook'),
+      'template' => '<a class="addthis_button_facebook_follow[?link_class= {[socialmedia:sm-default_link_class_profile]}?]" addthis:userid="[?profile_username=[socialmedia:sm-facebook_userid]?]" title="Follow on Facebook">' . theme('icon', array('bundle' => 'enterprise_social', 'icon' => 'social-facebook')) . '</a>',
+    ) + $defaults;
+  $elements['socialmedia_addthis-google-follow'] = array(
+      'label' => t('AddThis Google+ follow'),
+      'help' => t(''),
+      'group' => t('Social media: Google+'),
+      'template' => '<a class="addthis_button_google_follow[?link_class= {[socialmedia:sm-default_link_class_profile]}?]" addthis:userid="[?profile_username=[socialmedia:sm-googleplus_userid]?]" title="Follow on Google+">' . theme('icon', array('bundle' => 'enterprise_social', 'icon' => 'social-gplus')) . '</a>',
+    ) + $defaults;
+  $elements['socialmedia_addthis-instagram-follow'] = array(
+      'label' => t('AddThis Instagram follow'),
+      'help' => t(''),
+      'group' => t('Social media: Instagram'),
+      'template' => '<a class="addthis_button_instagram_follow[?link_class= {[socialmedia:sm-default_link_class_profile]}?]" [?profile_type=addthis:usertype="{[socialmedia:sm-instagram_type]}"?] addthis:userid="[?profile_username=[socialmedia:sm-instagram_userid]?]" title="Follow on Instagram">[?icon-markup={[socialmedia:sm-instagram_icon-markup]}?][?icon-path=<img src="{[socialmedia:sm-instagram_icon-path]}" alt="LinkedIn icon">?]</a>',
+    ) + $defaults;
+  $elements['socialmedia_addthis-linkedin-follow'] = array(
+      'label' => t('AddThis LinkedIn follow'),
+      'help' => t(''),
+      'group' => t('Social media: LinkedIn'),
+      'template' => '<a class="addthis_button_linkedin_follow[?link_class= {[socialmedia:sm-default_link_class_profile]}?]" [?profile_type=addthis:usertype="{[socialmedia:sm-linkedin_type]}"?] addthis:userid="[?profile_username=[socialmedia:sm-linkedin_userid]?]" title="Follow on LinkedIn">[?icon-markup={[socialmedia:sm-linkedin_icon-markup]}?][?icon-path=<img src="{[socialmedia:sm-linkedin_icon-path]}" alt="LinkedIn icon">?]</a>',
+    ) + $defaults;
+  $elements['socialmedia_addthis-pinterest-follow'] = array(
+      'label' => t('AddThis Pinterest follow'),
+      'help' => t(''),
+      'group' => t('Social media: Pinterest'),
+      'template' => '<a class="addthis_button_pinterest_follow[?link_class= {[socialmedia:sm-default_link_class_profile]}?]" addthis:userid="[?profile_username=[socialmedia:sm-pinterest_userid]?]" title="Follow on Pinterest">[?icon-markup={[socialmedia:sm-pinterest_icon-markup]}?][?icon-path=<img src="{[socialmedia:sm-pinterest_icon-path]}" alt="Pinterest icon">?]</a>',
+      //'template' => '<a class="addthis_button_pinterest_follow[?link_class= {[socialmedia:sm-default_link_class_profile]}?]" [?addthis:userid="[?profile_username=[socialmedia:sm-pinterest_userid]?]" title="Follow on Pinterest">[?icon-markup={[socialmedia:sm-pinterest_icon-markup]}?][?icon-path=<img src="{[socialmedia:sm-pinterest_icon-path]}" alt="Pinterest icon">?]</a>',
+
+    ) + $defaults;
+  $elements['socialmedia_addthis-rss-follow'] = array(
+      'label' => t('AddThis RSS follow'),
+      'help' => t(''),
+      'group' => t('Social media: RSS'),
+      'template' => '<a class="addthis_button_rss_follow[?link_class= {[socialmedia:sm-default_link_class_profile]}?]" addthis:userid="[?profile_username=[socialmedia:sm-rss_userid]?]" title="Subscribe to RSS feed">[?icon-markup={[socialmedia:sm-rss_icon-markup]}?][?icon-path=<img src="{[socialmedia:sm-rss_icon-path]}" alt="RSS icon">?]</a>',
+    ) + $defaults;
+  $elements['socialmedia_addthis-twitter-follow'] = array(
+      'label' => t('AddThis Twitter follow'),
+      'help' => t(''),
+      'group' => t('Social media: Twitter'),
+      'template' => '<a class="addthis_button_twitter_follow[?link_class= {[socialmedia:sm-default_link_class_profile]}?]" addthis:userid="[?profile_username=[socialmedia:sm-twitter_userid]?]" title="Follow on Twitter">[?icon-markup={[socialmedia:sm-twitter_icon-markup]}?][?icon-path=<img src="{[socialmedia:sm-twitter_icon-path]}" alt="Twitter icon">?]</a>',
+    ) + $defaults;
+  $elements['socialmedia_addthis-vimeo-follow'] = array(
+      'label' => t('AddThis Vimeo follow'),
+      'help' => t(''),
+      'group' => t('Social media: Vimeo'),
+      'template' => '<a class="addthis_button_vimeo_follow[?link_class= {[socialmedia:sm-default_link_class_profile]}?]" addthis:userid="[?profile_username=[socialmedia:sm-vimeo_userid]?]" title="Follow on Vimeo">' . theme('icon', array('bundle' => 'enterprise_social', 'icon' => 'social-youtube')) . '</a>',
+    ) + $defaults;
+  $elements['socialmedia_addthis-youtube-follow'] = array(
+      'label' => t('AddThis YouTube follow'),
+      'help' => t(''),
+      'group' => t('Social media: YouTube'),
+      'template' => '<a class="addthis_button_youtube_follow[?link_class= {[socialmedia:sm-default_link_class_profile]}?]" addthis:userid="[?profile_username=[socialmedia:sm-youtube_userid]?]" title="Follow on YouTube">' . theme('icon', array('bundle' => 'enterprise_social', 'icon' => 'social-youtube')) . '</a>',
+    ) + $defaults;
+
+
+
   // Facebook advanced widgets
   $elements = array_merge($elements, socialmedia_widgets_element_facebook_like_box());
   $elements = array_merge($elements, socialmedia_widgets_element_facebook_like_button());  // PVE 7/2/12
@@ -48,6 +122,7 @@ function socialmedia_widgets_element_info() {
   //$elements = array_merge($elements, socialmedia_widgets_element_rss_button());
   
   // Twitter advanced widgets
+  $elements = array_merge($elements, socialmedia_widgets_element_twitter_user_timeline_widget());
   $elements = array_merge($elements, socialmedia_widgets_element_twitter_profile_widget());
   
   // StumbleUpon advanced widgets
@@ -161,6 +236,18 @@ function socialmedia_base_platforms() {
     'profile-url' => "[?profile_url=[socialmedia:sm-googleplus_url]?]",
     'profile-text-link' => '<a href="[?profile_url=[socialmedia:sm-googleplus_url]?]" title="' . $title . '"[?link-target= target="{[socialmedia:sm-default_link_target_profile]}"?][?link-rel= rel="{[socialmedia:sm-default_link_rel_profile]}"?]>[?profile_username=[socialmedia:sm-googleplus_username]?]</a>',  
     'profile-button' => '<a href="[?profile_url=[socialmedia:sm-googleplus_url]?]" title="' . $title . '"[?link-target= target="{[socialmedia:sm-default_link_target_profile]}"?][?link-rel= rel="{[socialmedia:sm-default_link_rel_profile]}"?]><img src="[?icon-path=[socialmedia:sm-googleplus_icon-path]?]" alt="Google+ icon" ></a>',
+  );
+
+  $platforms['instagram'] = array(
+    'label' => t('Instagram'),
+    'group' => t('Social media: Instagram'),
+  );
+  $title = t("Visit !varusername on Instagram", array('!varusername' => '[?profile_username=[socialmedia:sm-instagram_username]?]'));
+  $stitle = t("Share on Instagram");
+  $platforms['instagram']['templates'] = array(
+    'profile-url' => "[?profile_url=[socialmedia:sm-instagram_url]?]",
+    'profile-text-link' => '<a href="[?profile_url=[socialmedia:sm-instagram_url]?]" title="' . $title . '"[?link-target= target="{[socialmedia:sm-default_link_target_profile]}"?][?link-rel= rel="{[socialmedia:sm-default_link_rel_profile]}"?]>[?profile_username=[socialmedia:sm-instagram_username]?]</a>',
+    'profile-button' => '<a href="[?profile_url=[socialmedia:sm-instagram_url]?]" title="' . $title . '"[?link-target= target="{[socialmedia:sm-default_link_target_profile]}"?][?link-rel= rel="{[socialmedia:sm-default_link_rel_profile]}"?]><img src="[?icon-path=[socialmedia:sm-instagram_icon-path]?]" alt="Instagram icon" ></a>',
   );
   
   $platforms['linkedin'] = array(
@@ -373,7 +460,8 @@ function socialmedia_widgets_element_form_alter(&$form, $set, $element) {
 }
 
 function socialmedia_widgets_element_addthis_js() {
-  return '<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#username=[?username=[socialmedia:sm-addthis_username]?]"></script>';
+  //return '<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#username=[?username=[socialmedia:sm-addthis_username]?]"></script>';
+  return '<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=[?pubid=[socialmedia:sm-addthis_pubid]?]"></script>';
   //return '<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#username="></script>';
 }
 
@@ -406,6 +494,16 @@ function socialmedia_widgets_element_alter_addthis_addthis_counter(&$form, $set,
   $form['style']['#description'] = t('Select button and style');
 }
 
+function socialmedia_widgets_element_addthis_facebook_share_simple($defaults) {
+  $addthis_js = socialmedia_widgets_element_addthis_js();
+  $elements['socialmedia_addthis-facebook-share-simple'] = array(
+    'label' => t('Addthis Facebook share button (simple)'),
+    'group' => t('Social media: Facebook'),
+    'template' => '<a class="addthis_button_facebook[?link_class= {[socialmedia:sm-default_link_class_sharing]}?]">[?icon-markup={[socialmedia:sm-facebook_icon-markup]}?][?icon-path=<img src="{[socialmedia:sm-facebook_icon-path]}" alt="Facebook icon">?]</a>',
+  ) + $defaults;
+  return $elements;
+}
+
 function socialmedia_widgets_element_addthis_facebook_like() {
   $addthis_js = socialmedia_widgets_element_addthis_js();
   $elements['socialmedia_addthis-facebook-like'] = array(
@@ -432,6 +530,16 @@ function socialmedia_widgets_element_alter_addthis_facebook_like(&$form, $set, $
   $form['layout']['#type'] = 'select';
   $form['layout']['#options'] = $options;
   $form['layout']['#description'] = t('Select button and count style');
+}
+
+function socialmedia_widgets_element_addthis_google_share_simple($defaults) {
+  $addthis_js = socialmedia_widgets_element_addthis_js();
+  $elements['socialmedia_addthis-google-share-simple'] = array(
+      'label' => t('Addthis Google share button (simple)'),
+      'group' => t('Social media: Google+'),
+      'template' => '<a class="addthis_button_google_plusone_share[?link_class= {[socialmedia:sm-default_link_class_sharing]}?]">[?icon-markup={[socialmedia:sm-googleplus_icon-markup]}?][?icon-path=<img src="{[socialmedia:sm-googleplus_icon-path]}" alt="Google icon">?]</a>',
+    ) + $defaults;
+  return $elements;
 }
 
 function socialmedia_widgets_element_addthis_google_plusone() {
@@ -483,6 +591,26 @@ function socialmedia_widgets_element_addthis_email() {
   return $elements;
 }
 
+function socialmedia_widgets_element_addthis_linkedin_share_simple($defaults) {
+  $addthis_js = socialmedia_widgets_element_addthis_js();
+  $elements['socialmedia_addthis-linkedin-share-simple'] = array(
+      'label' => t('Addthis Linkedin share button (simple)'),
+      'group' => t('Social media: LinkedIn'),
+      'template' => '<a class="addthis_button_linkedin[?link_class= {[socialmedia:sm-default_link_class_sharing]}?]">[?icon-markup={[socialmedia:sm-linkedin_icon-markup]}?][?icon-path=<img src="{[socialmedia:sm-linkedin_icon-path]}" alt="LinkedIn icon">?]</a>',
+    ) + $defaults;
+  return $elements;
+}
+
+function socialmedia_widgets_element_addthis_pinterest_share_simple($defaults) {
+  $addthis_js = socialmedia_widgets_element_addthis_js();
+  $elements['socialmedia_addthis-pinterest-share-simple'] = array(
+    'label' => t('Addthis Pinterest share button (simple)'),
+    'group' => t('Social media: Pinterest'),
+    'template' => '<a class="addthis_button_pinterest_share[?link_class= {[socialmedia:sm-default_link_class_sharing]}?]">[?icon-markup={[socialmedia:sm-pinterest_icon-markup]}?][?icon-path=<img src="{[socialmedia:sm-pinterest_icon-path]}" alt="Pinterest icon">?]</a>',
+  ) + $defaults;
+  return $elements;
+}
+
 function socialmedia_widgets_element_addthis_pinterest_pinit() {
   $addthis_js = socialmedia_widgets_element_addthis_js();
   $elements['socialmedia_addthis-pinterest-pinit'] = array(
@@ -512,6 +640,17 @@ function socialmedia_widgets_element_alter_addthis_pinterest_pinit(&$form, $set,
   $form['size']['#description'] = t('Select button size and layout');
 
   return $form;
+}
+
+function socialmedia_widgets_element_addthis_tweet_simple($defaults) {
+  $addthis_js = socialmedia_widgets_element_addthis_js();
+  $elements['socialmedia_addthis-tweet-simple'] = array(
+    'label' => t('Addthis tweet button (simple)'),
+    'group' => t('Social media: Twitter'),
+    //'template' => '<a class="addthis_button_twitter[?link_class= {[socialmedia:sm-default_link_class_sharing]}?]"[?via= tw:via="{[socialmedia:sm-twitter_username]}"?]>[?icon-markup={[socialmedia:sm-twitter_icon-markup]}?][?icon-path=<img src="{[socialmedia:sm-twitter_icon-path]}" alt="Twitter icon">?]</a>',
+    'template' => '<a class="addthis_button_twitter[?link_class= {[socialmedia:sm-default_link_class_sharing]}?]">[?icon-markup={[socialmedia:sm-twitter_icon-markup]}?][?icon-path=<img src="{[socialmedia:sm-twitter_icon-path]}" alt="Twitter icon">?]</a>',
+  ) + $defaults;
+  return $elements;
 }
 
 function socialmedia_widgets_element_addthis_tweet() {
@@ -629,7 +768,7 @@ function socialmedia_widgets_element_facebook_like_box() {
     'label' => t('Facebook like box'),
     'help' => t('Resizing will make images an exact set of dimensions. This may cause images to be stretched or shrunk disproportionately.'),
     'group' => t('Social media: Facebook'),
-    'template' => '<div class="fb-like-box" data-href="[?facebook_page_url=[socialmedia:sm-facebook_url]?]" data-width="[?width=[socialmedia:sm-default_width]?]" [?height=data-height="{<none>}"?] data-colorscheme="[?color_scheme=light?]" data-border-color="[?border_color=[socialmedia:sm-default_color_border]?]" data-show-faces="[?show_faces=true?]" data-stream="[?data_stream=false?]" data-header="[?data_header=false?]"></div>',
+    'template' => '<div class="fb-like-box" data-href="[?facebook_page_url=[socialmedia:sm-facebook_url]?]" [?width=data-width="{[socialmedia:sm-default_width]}"?] [?height=data-height="{[socialmedia:sm-default_height]}"?] data-colorscheme="[?color_scheme=light?]" data-border-color="[?border_color=[socialmedia:sm-default_color_border]?]" data-show-faces="[?show_faces=true?]" data-stream="[?data_stream=false?]" data-header="[?data_header=true?]"></div>',
     'add_js' => array(
       'data' => $facebook_js_sdk,
       'options' => array(
@@ -783,6 +922,29 @@ function socialmedia_widgets_element_rss_button() {
   return $elements;
 }
 */
+
+function socialmedia_widgets_element_twitter_user_timeline_widget() {
+  $template = <<<EOF
+<a class="twitter-timeline" href="https://twitter.com/[?profile_username=[socialmedia:sm-twitter_userid]?]"
+data-widget-id="[?profile_user_timeline_widget_id=[socialmedia:sm-twitter_user-timeline-widget-id]?]"
+EOF;
+  $template .= '[?dimensions:width= width="{[socialmedia:sm-default_width]}"?]';
+  $template .= '[?dimensions:height= height="{[socialmedia:sm-default_height]}"?]';
+  $template .= '[?appearance:link_color= data-link-color="[socialmedia:sm-default_color_body_linktext]"?]';
+  $template .= '[?appearance:border_color= border-color="[socialmedia:sm-default_color_border]"?]';
+  $template .= '[?preferences:number_of_tweets= data-tweet-limit="{<none>}"?]';
+$template .= <<<EOF
+>Tweets by @[?profile_username=[socialmedia:sm-twitter_userid]?]</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+EOF;
+  $elements['socialmedia_twitter-user-timeline-widget'] = array(
+    'label' => t('Twitter user timeline widget'),
+    'group' => t('Social media: Twitter'),
+    'template' => $template,
+    'form callback' => 'widgets_template_auto_form',
+  );
+  return $elements;
+}
 
 function socialmedia_widgets_element_twitter_profile_widget() {
   $template = <<<EOF
@@ -1144,13 +1306,44 @@ function socialmedia_widgets_default_sets() {
   );
   $sets['facebook-like-box'] = array(
     'data' => array(
-      'cache' => array('scope' => 'author'),
+      //'cache' => array(
+      //  'scope' => 'author',
+      //),
+      'socialmedia' => array(
+        'profile_context' => 'site',
+      ),
     ),
     'elements' => array(
       array(
         'name' => 'socialmedia_facebook-like-box',
         'weight' => 1,
         'data' => array(
+        ),
+      ),
+    ),
+  );
+  $sets['twitter-user-timeline-widget'] = array(
+    'data' => array(
+      //'cache' => array(
+      //  'scope' => 'author',
+      //),
+      'socialmedia' => array(
+        'profile_context' => 'site',
+      ),
+    ),
+    'elements' => array(
+      array(
+        'name' => 'socialmedia_twitter-user-timeline-widget',
+        'weight' => 1,
+        'data' => array(
+          'preferences' => array(
+          ),
+          'dimensions' => array(
+          ),
+          'appearance' => array(
+          ),
+          'settings' => array(
+          ),
         ),
       ),
     ),
