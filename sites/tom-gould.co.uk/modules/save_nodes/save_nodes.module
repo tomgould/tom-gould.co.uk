@@ -23,14 +23,17 @@ function save_nodes_menu() {
  */
 function save_nodes_save_all_the_nodes() {
   $nids = save_nodes_get_nids();
-
+  $titles = array();
   foreach ($nids as $nid) {
     $node = node_load($nid);
 
     if (!empty($node) && !empty($node->nid)) {
       node_save($node);
+      $titles = $node->title;
     }
   }
+
+  return '';
 }
 
 /**
@@ -61,5 +64,5 @@ function save_nodes_get_nids() {
 function save_nodes_access_function() {
   global $user;
 
-  return $user->uid === 1;
+  return $user->uid === '1';
 }
