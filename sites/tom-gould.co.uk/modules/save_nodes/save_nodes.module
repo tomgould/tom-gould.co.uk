@@ -1,0 +1,65 @@
+<?php
+
+/**
+ * Implements hook_menu()
+ *
+ * @return array $items
+ */
+function save_nodes_menu() {
+  $items = array();
+  $items['save-nodes'] = array(
+    'title'           => t('Save all the nodes'),
+    'page callback'   => 'save_nodes_save_all_the_nodes',
+    'access callback' => 'save_nodes_access_function',
+    'type'             => MENU_NORMAL_ITEM,
+  );
+  
+  return $items;
+}
+
+/**
+ * Saves all the nodes
+ * 
+ */
+function save_nodes_save_all_the_nodes() {
+  $nids = save_nodes_get_nids();
+
+  foreach ($nids as $nid) {
+    $node = node_load($nid);
+
+    if (!empty($node) && !empty($node->nid)) {
+      node_save($node);
+    }
+  }
+}
+
+/**
+ * Returns an array of nids
+ *
+ * @return array
+ */
+function save_nodes_get_nids() {
+  // Get all the video node IDs
+  $query  = db_select('node', 'n');
+  $query->fields('n', array('nid'));
+  $query->condition('n.status', '1');
+  $result = $query->orderBy('n.nid')->execute();
+
+  foreach ($result as $row) {
+    $nids[] = $row->nid;
+  }
+
+  return $nids;
+}
+
+/**
+ * Access function
+ * 
+ * @param string $string
+ * @return boolean
+ */
+function save_nodes_access_function() {
+  global $user;
+
+  return $user->uid === 1;
+}
