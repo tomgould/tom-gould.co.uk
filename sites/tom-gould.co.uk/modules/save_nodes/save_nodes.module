@@ -37,7 +37,8 @@ function save_nodes_save_all_the_nodes() {
 }
 
 /**
- * Returns an array of nids
+ * Returns an array of nids, ordered by n.changed so they are saved in the
+ * order they were saved in before, just in case
  *
  * @return array
  */
@@ -46,6 +47,7 @@ function save_nodes_get_nids() {
   $query  = db_select('node', 'n');
   $query->fields('n', array('nid'));
   $query->condition('n.status', '1');
+  $query->orderBy('n.changed', 'ASC'); 
   $result = $query->orderBy('n.nid')->execute();
 
   foreach ($result as $row) {
