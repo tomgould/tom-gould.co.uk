@@ -23,17 +23,32 @@ function save_nodes_menu() {
  */
 function save_nodes_save_all_the_nodes() {
   $nids = save_nodes_get_nids();
-  $titles = array();
   foreach ($nids as $nid) {
     $node = node_load($nid);
-
     if (!empty($node) && !empty($node->nid)) {
+      //usleep(1100000);
       node_save($node);
-      $titles = $node->title;
     }
   }
+}
 
-  return '';
+/**
+ * Implements hook_node_presave
+ *
+ * The node updated is set as the request time so all nodes end up with the same
+ * changed time value when using this module, this replaces that with the
+ * an incremented value
+ *
+ * @param type $node
+ */
+function save_nodes_node_presave($node) {
+  static $changed;
+  if (empty($changed)) {
+    $changed = $node->changed;
+  }
+  $changed++;
+
+  $node->changed = $changed;
 }
 
 /**
@@ -45,10 +60,10 @@ function save_nodes_save_all_the_nodes() {
 function save_nodes_get_nids() {
   // Get all the video node IDs
   $query  = db_select('node', 'n');
-  $query->fields('n', array('nid'));
+  $query->fields('n', array('nid', 'changed'));
   $query->condition('n.status', '1');
   $query->orderBy('n.changed', 'ASC'); 
-  $result = $query->orderBy('n.nid')->execute();
+  $result = $query->execute();
 
   foreach ($result as $row) {
     $nids[] = $row->nid;
