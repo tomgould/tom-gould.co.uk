@@ -56,19 +56,21 @@ function socialmedia_widgets_element_info() {
       'label' => t('AddThis Facebook follow'),
       'help' => t(''),
       'group' => t('Social media: Facebook'),
-      'template' => '<a class="addthis_button_facebook_follow[?link_class= {[socialmedia:sm-default_link_class_profile]}?]" addthis:userid="[?profile_username=[socialmedia:sm-facebook_userid]?]" title="Follow on Facebook">' . theme('icon', array('bundle' => 'enterprise_social', 'icon' => 'social-facebook')) . '</a>',
+      //'template' => '<a class="addthis_button_facebook_follow[?link_class= {[socialmedia:sm-default_link_class_profile]}?]" addthis:userid="[?profile_username=[socialmedia:sm-facebook_userid]?]" title="Follow on Facebook">' . theme('icon', array('bundle' => 'enterprise_social', 'icon' => 'social-facebook')) . '</a>',
+      'template' => '<a class="addthis_button_facebook_follow[?link_class= {[socialmedia:sm-default_link_class_profile]}?]" addthis:userid="[?profile_username=[socialmedia:sm-facebook_userid]?]" title="Follow on Facebook">[?icon-markup={[socialmedia:sm-facebook_icon-markup]}?][?icon-path=<img src="{[socialmedia:sm-facebook_icon-path]}" alt="Facebook icon">?]</a>',
     ) + $defaults;
   $elements['socialmedia_addthis-google-follow'] = array(
       'label' => t('AddThis Google+ follow'),
       'help' => t(''),
       'group' => t('Social media: Google+'),
-      'template' => '<a class="addthis_button_google_follow[?link_class= {[socialmedia:sm-default_link_class_profile]}?]" addthis:userid="[?profile_username=[socialmedia:sm-googleplus_userid]?]" title="Follow on Google+">' . theme('icon', array('bundle' => 'enterprise_social', 'icon' => 'social-gplus')) . '</a>',
+      //'template' => '<a class="addthis_button_google_follow[?link_class= {[socialmedia:sm-default_link_class_profile]}?]" addthis:userid="[?profile_username=[socialmedia:sm-googleplus_userid]?]" title="Follow on Google+">' . theme('icon', array('bundle' => 'enterprise_social', 'icon' => 'social-gplus')) . '</a>',
+      'template' => '<a class="addthis_button_google_follow[?link_class= {[socialmedia:sm-default_link_class_profile]}?]" addthis:userid="[?profile_username=[socialmedia:sm-googleplus_userid]?]" title="Follow on Google+">[?icon-markup={[socialmedia:sm-googleplus_icon-markup]}?][?icon-path=<img src="{[socialmedia:sm-googleplus_icon-path]}" alt="Google+ icon">?]</a>',
     ) + $defaults;
   $elements['socialmedia_addthis-instagram-follow'] = array(
       'label' => t('AddThis Instagram follow'),
       'help' => t(''),
       'group' => t('Social media: Instagram'),
-      'template' => '<a class="addthis_button_instagram_follow[?link_class= {[socialmedia:sm-default_link_class_profile]}?]" [?profile_type=addthis:usertype="{[socialmedia:sm-instagram_type]}"?] addthis:userid="[?profile_username=[socialmedia:sm-instagram_userid]?]" title="Follow on Instagram">[?icon-markup={[socialmedia:sm-instagram_icon-markup]}?][?icon-path=<img src="{[socialmedia:sm-instagram_icon-path]}" alt="LinkedIn icon">?]</a>',
+      'template' => '<a class="addthis_button_instagram_follow[?link_class= {[socialmedia:sm-default_link_class_profile]}?]" [?profile_type=addthis:usertype="{[socialmedia:sm-instagram_type]}"?] addthis:userid="[?profile_username=[socialmedia:sm-instagram_userid]?]" title="Follow on Instagram">[?icon-markup={[socialmedia:sm-instagram_icon-markup]}?][?icon-path=<img src="{[socialmedia:sm-instagram_icon-path]}" alt="Instagram icon">?]</a>',
     ) + $defaults;
   $elements['socialmedia_addthis-linkedin-follow'] = array(
       'label' => t('AddThis LinkedIn follow'),
@@ -100,13 +102,16 @@ function socialmedia_widgets_element_info() {
       'label' => t('AddThis Vimeo follow'),
       'help' => t(''),
       'group' => t('Social media: Vimeo'),
-      'template' => '<a class="addthis_button_vimeo_follow[?link_class= {[socialmedia:sm-default_link_class_profile]}?]" addthis:userid="[?profile_username=[socialmedia:sm-vimeo_userid]?]" title="Follow on Vimeo">' . theme('icon', array('bundle' => 'enterprise_social', 'icon' => 'social-youtube')) . '</a>',
+      //'template' => '<a class="addthis_button_vimeo_follow[?link_class= {[socialmedia:sm-default_link_class_profile]}?]" addthis:userid="[?profile_username=[socialmedia:sm-vimeo_userid]?]" title="Follow on Vimeo">' . theme('icon', array('bundle' => 'enterprise_social', 'icon' => 'social-youtube')) . '</a>',
+      'template' => '<a class="addthis_button_vimeo_follow[?link_class= {[socialmedia:sm-default_link_class_profile]}?]" addthis:userid="[?profile_username=[socialmedia:sm-vimeo_userid]?]" title="Follow on Vimeo">[?icon-markup={[socialmedia:sm-vimeo_icon-markup]}?][?icon-path=<img src="{[socialmedia:sm-vimeo_icon-path]}" alt="Vimeo icon">?]</a>',
+
     ) + $defaults;
   $elements['socialmedia_addthis-youtube-follow'] = array(
       'label' => t('AddThis YouTube follow'),
       'help' => t(''),
       'group' => t('Social media: YouTube'),
-      'template' => '<a class="addthis_button_youtube_follow[?link_class= {[socialmedia:sm-default_link_class_profile]}?]" addthis:userid="[?profile_username=[socialmedia:sm-youtube_userid]?]" title="Follow on YouTube">' . theme('icon', array('bundle' => 'enterprise_social', 'icon' => 'social-youtube')) . '</a>',
+      //'template' => '<a class="addthis_button_youtube_follow[?link_class= {[socialmedia:sm-default_link_class_profile]}?]" addthis:userid="[?profile_username=[socialmedia:sm-youtube_userid]?]" title="Follow on YouTube">' . theme('icon', array('bundle' => 'enterprise_social', 'icon' => 'social-youtube')) . '</a>',
+      'template' => '<a class="addthis_button_youtube_follow[?link_class= {[socialmedia:sm-default_link_class_profile]}?]" addthis:userid="[?profile_username=[socialmedia:sm-youtube_userid]?]" title="Follow on YouTube">[?icon-markup={[socialmedia:sm-youtube_icon-markup]}?][?icon-path=<img src="{[socialmedia:sm-youtube_icon-path]}" alt="YouTube icon">?]</a>',
     ) + $defaults;
 
 
