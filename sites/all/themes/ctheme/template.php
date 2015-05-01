@@ -3,7 +3,7 @@
 /**
  * Overrides the theme_link function to add the page title and site name to
  * all links, even if not provided.
- * 
+ *
  * @param type $variables
  * @return type
  */
@@ -16,7 +16,7 @@ function ctheme_link($variables) {
   }
 
   $attributes = $variables['options']['attributes'];
-  $text = trim(check_plain(strip_tags($variables['text'])));
+  $text       = trim(check_plain(strip_tags($variables['text'])));
   if (!empty($attributes['title'])) {
     if (mb_strpos($attributes['title'], $site_name) === FALSE) {
       $attributes['title'] .= " | " . $site_name;
@@ -24,7 +24,7 @@ function ctheme_link($variables) {
   }
   else {
     $normal_path = drupal_get_normal_path($variables['path']);
-    $item = menu_get_item($normal_path);
+    $item        = menu_get_item($normal_path);
     if (!empty($item['title'])) {
       $attributes['title'] = $item['title'] . " | " . $site_name;
     }
@@ -36,15 +36,16 @@ function ctheme_link($variables) {
     }
   }
 
+  $attributes['title'] = htmlspecialchars_decode($attributes['title'], ENT_NOQUOTES);
+
   return '<a href="' . check_plain(
-    url(
-      $variables['path'],
-      $variables['options']
-    )
-  ) . '"' . drupal_attributes($attributes) . '>' .
-    ($variables['options']['html'] ?
-    $variables['text'] : check_plain($variables['text'])
-  ) . '</a>';
+          url(
+              $variables['path'], $variables['options']
+          )
+      ) . '"' . drupal_attributes($attributes) . '>' .
+      ($variables['options']['html'] ?
+          $variables['text'] : check_plain($variables['text'])
+      ) . '</a>';
 }
 
 /**
@@ -55,7 +56,7 @@ function ctheme_link($variables) {
  * @return
  *   A string containing the breadcrumb output.
  */
-function ctheme_breadcrumb($variables){
+function ctheme_breadcrumb($variables) {
   $breadcrumb = $variables['breadcrumb'];
   if (!empty($breadcrumb)) {
     $breadcrumb[] = drupal_get_title();
@@ -104,6 +105,7 @@ function ctheme_process_page(&$variables) {
   // call the slideshow function
   $variables['slideshow'] = ctheme_slideshow();
 }
+
 /**
  * Change the comment button link text
  *
@@ -111,24 +113,23 @@ function ctheme_process_page(&$variables) {
  */
 function ctheme_preprocess_node(&$variables) {
   if (isset($variables['content']['links']['comment']['#links']['comment-add']['title'])) {
-    $variables['content']['links']['comment']['#links']['comment-add']['title']  = t('Comment');
+    $variables['content']['links']['comment']['#links']['comment-add']['title'] = t('Comment');
   }
 }
 
 function ctheme_form_alter(&$form, &$form_state, $form_id) {
   if ($form_id == 'search_block_form') {
-  
-    unset($form['search_block_form']['#title']);
-	
-    $form['search_block_form']['#title_display'] = 'invisible';
-	$form_default = t('Search');
-    $form['search_block_form']['#default_value'] = $form_default;
-    $form['actions']['submit'] = array('#type' => 'image_button', '#src' => base_path() . path_to_theme() . '/images/search-button.png');
 
- 	$form['search_block_form']['#attributes'] = array('onblur' => "if (this.value == '') {this.value = '{$form_default}';}", 'onfocus' => "if (this.value == '{$form_default}') {this.value = '';}" );
+    unset($form['search_block_form']['#title']);
+
+    $form['search_block_form']['#title_display'] = 'invisible';
+    $form_default                                = t('Search');
+    $form['search_block_form']['#default_value'] = $form_default;
+    $form['actions']['submit']                   = array('#type' => 'image_button', '#src' => base_path() . path_to_theme() . '/images/search-button.png');
+
+    $form['search_block_form']['#attributes'] = array('onblur' => "if (this.value == '') {this.value = '{$form_default}';}", 'onfocus' => "if (this.value == '{$form_default}') {this.value = '';}");
   }
 }
-
 
 function ctheme_slideshow() {
   if (drupal_is_front_page()) {
@@ -136,16 +137,16 @@ function ctheme_slideshow() {
     drupal_add_js(drupal_get_path('theme', 'ctheme') . '/js/jquery.cycle.all.min.js');
 
     //Initialize slideshow using theme settings
-    $effect=theme_get_setting('slideshow_effect','ctheme');
-    $effect_time=theme_get_setting('slideshow_effect_time','ctheme')*1000;
+    $effect      = theme_get_setting('slideshow_effect', 'ctheme');
+    $effect_time = theme_get_setting('slideshow_effect_time', 'ctheme') * 1000;
 
     //Defined the initial height (300) of slideshow and then the slideshow inherits the height of each slider item dynamically
     drupal_add_js('
       jQuery(document).ready(function($) {
         $("#slideshow").cycle({
-          fx:    "'.$effect.'",
+          fx:    "' . $effect . '",
           speed:  "slow",
-          timeout: "'.$effect_time.'",
+          timeout: "' . $effect_time . '",
           pager:  "#slider-navigation",
           pagerAnchorBuilder: function(idx, slide) {
             return "#slider-navigation li:eq(" + (idx) + ") a";
@@ -159,14 +160,14 @@ function ctheme_slideshow() {
           $(this).parent().animate({height: $ht});
         }
       });', array(
-        'type' => 'inline',
-        'scope' => 'header',
-        'weight' => 5
-      )
+      'type'   => 'inline',
+      'scope'  => 'header',
+      'weight' => 5
+        )
     );
 
     // get the published slideshow nodes and make the slideshow html
-    $query = db_select('node', 'n');
+    $query  = db_select('node', 'n');
     $query->addField('n', 'nid');
     $query->condition('n.status', 1, '=');
     $query->condition('n.type', 'slider', '=');
@@ -183,26 +184,24 @@ function ctheme_slideshow() {
     $slideshow_navigation = array();
 
     // load all the nodes
-    foreach($result as $nid) {
+    foreach ($result as $nid) {
       $node = node_load($nid->nid);
 
       // make the title and more button if there is a link
       if (!empty($node->field_link_path[LANGUAGE_NONE][0]['value'])) {
         $title = l($node->title, $node->field_link_path[LANGUAGE_NONE][0]['value']);
-        $more = l(
-          t('Tell me more'),
-          $node->field_link_path[LANGUAGE_NONE][0]['value'],
-          array(
-            'attributes' => array(
-              'class' => array('more')
-            )
+        $more  = l(
+            t('Tell me more'), $node->field_link_path[LANGUAGE_NONE][0]['value'], array(
+          'attributes' => array(
+            'class' => array('more')
           )
+            )
         );
-        $more = '<div class="slider-more">' . $more . '</div>';
+        $more  = '<div class="slider-more">' . $more . '</div>';
       }
       else {
         $title = $node->title;
-        $more = '';
+        $more  = '';
       }
 
       // the type of slide to make
@@ -210,7 +209,7 @@ function ctheme_slideshow() {
 
       // Text only slides
       if ($slider_type == 'text') {
-        $slideshow_slides[] = '
+        $slideshow_slides[]     = '
         <div class="slider-item" style="display:none;">
           <div class="content">
               <h2> ' . $title . ' </h2>
@@ -226,19 +225,19 @@ function ctheme_slideshow() {
       if ($slider_type == 'image' && !empty($node->field_image[LANGUAGE_NONE][0]['uri'])) {
         $img = new TigerfishImage();
         $img->style('slider-full-width') // optional
-           ->path($node->field_image[LANGUAGE_NONE][0]['uri'])
-           ->alt($node->title)
-           ->title($node->title)
-           ->imageClasses(array('masked'))
-           ->link(isset($node->field_link_path[LANGUAGE_NONE][0]['value']) ?
-                        $node->field_link_path[LANGUAGE_NONE][0]['value'] :
-                        NULL);
+            ->path($node->field_image[LANGUAGE_NONE][0]['uri'])
+            ->alt($node->title)
+            ->title($node->title)
+            ->imageClasses(array('masked'))
+            ->link(isset($node->field_link_path[LANGUAGE_NONE][0]['value']) ?
+                    $node->field_link_path[LANGUAGE_NONE][0]['value'] :
+                    NULL);
         $img = $img->getImageTag();
 
-        $slideshow_slides[] = '
+        $slideshow_slides[]     = '
         <div class="slider-item" style="display:none;">
           <div class="content">
-            '.$img.'
+            ' . $img . '
           </div>
         </div>
         ';
@@ -249,20 +248,20 @@ function ctheme_slideshow() {
       if ($slider_type == 'image-left' && !empty($node->field_image[LANGUAGE_NONE][0]['uri'])) {
         $img = new TigerfishImage();
         $img->style('slider-half-width') // optional
-          ->path($node->field_image[LANGUAGE_NONE][0]['uri'])
-          ->alt($node->title)
-          ->title($node->title)
-          ->imageClasses(array('masked'))
-          ->link(isset($node->field_link_path[LANGUAGE_NONE][0]['value']) ?
-          $node->field_link_path[LANGUAGE_NONE][0]['value'] :
-          NULL);
+            ->path($node->field_image[LANGUAGE_NONE][0]['uri'])
+            ->alt($node->title)
+            ->title($node->title)
+            ->imageClasses(array('masked'))
+            ->link(isset($node->field_link_path[LANGUAGE_NONE][0]['value']) ?
+                    $node->field_link_path[LANGUAGE_NONE][0]['value'] :
+                    NULL);
         $img = $img->getImageTag();
 
-        $slideshow_slides[] = '
+        $slideshow_slides[]     = '
         <div class="slider-item" style="display:none;">
           <div class="content">
             <div style="float:left; padding:0 30px 0 0;">
-              '.$img.'
+              ' . $img . '
             </div>
               <h2> ' . $title . ' </h2>
               ' . $node->field_body[LANGUAGE_NONE][0]['value'] . '
@@ -277,20 +276,20 @@ function ctheme_slideshow() {
       if ($slider_type == 'image-right' && !empty($node->field_image[LANGUAGE_NONE][0]['uri'])) {
         $img = new TigerfishImage();
         $img->style('slider-half-width') // optional
-          ->path($node->field_image[LANGUAGE_NONE][0]['uri'])
-          ->alt($node->title)
-          ->title($node->title)
-          ->imageClasses(array('masked'))
-          ->link(isset($node->field_link_path[LANGUAGE_NONE][0]['value']) ?
-          $node->field_link_path[LANGUAGE_NONE][0]['value'] :
-          NULL);
+            ->path($node->field_image[LANGUAGE_NONE][0]['uri'])
+            ->alt($node->title)
+            ->title($node->title)
+            ->imageClasses(array('masked'))
+            ->link(isset($node->field_link_path[LANGUAGE_NONE][0]['value']) ?
+                    $node->field_link_path[LANGUAGE_NONE][0]['value'] :
+                    NULL);
         $img = $img->getImageTag();
 
-        $slideshow_slides[] = '
+        $slideshow_slides[]     = '
         <div class="slider-item" style="display:none;">
           <div class="content">
             <div style="float:right; padding:0 0 0 30px;">
-              '.$img.'
+              ' . $img . '
             </div>
               <h2> ' . $title . ' </h2>
               ' . $node->field_body[LANGUAGE_NONE][0]['value'] . '
@@ -303,15 +302,14 @@ function ctheme_slideshow() {
     }
 
     if (!empty($slideshow_slides)) {
-      $return = '<div id="slideshow">' . implode('', $slideshow_slides) . '</div>';
+      $return     = '<div id="slideshow">' . implode('', $slideshow_slides) . '</div>';
       $navigation = '
       <div id="slider-controls-wrapper">
       <div id="slider-controls">
       <ul id="slider-navigation">' . implode('', $slideshow_navigation) .
-        '</ul></div></div>';
+          '</ul></div></div>';
 
       return $return . $navigation;
-
     }
   }
   else {
