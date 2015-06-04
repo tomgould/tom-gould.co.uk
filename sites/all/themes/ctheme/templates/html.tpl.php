@@ -46,6 +46,59 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php print $language->language; ?>" version="XHTML+RDFa 1.0" dir="<?php print $language->dir; ?>"<?php print $rdf_namespaces; ?>>
 
   <head profile="<?php print $grddl_profile; ?>">
+    <!--
+
+
+               TTTTTTTTTTTTTTTTTTTTTTT     OOOOOOOOO     MMMMMMMM               MMMMMMMM
+               T:::::::::::::::::::::T   OO:::::::::OO   M:::::::M             M:::::::M
+               T:::::::::::::::::::::T OO:::::::::::::OO M::::::::M           M::::::::M
+               T:::::TT:::::::TT:::::TO:::::::OOO:::::::OM:::::::::M         M:::::::::M
+               TTTTTT  T:::::T  TTTTTTO::::::O   O::::::OM::::::::::M       M::::::::::M
+                       T:::::T        O:::::O     O:::::OM:::::::::::M     M:::::::::::M
+                       T:::::T        O:::::O     O:::::OM:::::::M::::M   M::::M:::::::M
+                       T:::::T        O:::::O     O:::::OM::::::M M::::M M::::M M::::::M
+                       T:::::T        O:::::O     O:::::OM::::::M  M::::M::::M  M::::::M
+                       T:::::T        O:::::O     O:::::OM::::::M   M:::::::M   M::::::M
+                       T:::::T        O:::::O     O:::::OM::::::M    M:::::M    M::::::M
+                       T:::::T        O::::::O   O::::::OM::::::M     MMMMM     M::::::M
+                     TT:::::::TT      O:::::::OOO:::::::OM::::::M               M::::::M
+                     T:::::::::T       OO:::::::::::::OO M::::::M               M::::::M
+                     T:::::::::T         OO:::::::::OO   M::::::M               M::::::M
+                     TTTTTTTTTTT           OOOOOOOOO     MMMMMMMM               MMMMMMMM
+
+
+
+
+
+
+
+
+
+        GGGGGGGGGGGGG     OOOOOOOOO     UUUUUUUU     UUUUUUUULLLLLLLLLLL             DDDDDDDDDDDDD
+     GGG::::::::::::G   OO:::::::::OO   U::::::U     U::::::UL:::::::::L             D::::::::::::DDD
+   GG:::::::::::::::G OO:::::::::::::OO U::::::U     U::::::UL:::::::::L             D:::::::::::::::DD
+  G:::::GGGGGGGG::::GO:::::::OOO:::::::OUU:::::U     U:::::UULL:::::::LL             DDD:::::DDDDD:::::D
+ G:::::G       GGGGGGO::::::O   O::::::O U:::::U     U:::::U   L:::::L                 D:::::D    D:::::D
+G:::::G              O:::::O     O:::::O U:::::D     D:::::U   L:::::L                 D:::::D     D:::::D
+G:::::G              O:::::O     O:::::O U:::::D     D:::::U   L:::::L                 D:::::D     D:::::D
+G:::::G    GGGGGGGGGGO:::::O     O:::::O U:::::D     D:::::U   L:::::L                 D:::::D     D:::::D
+G:::::G    G::::::::GO:::::O     O:::::O U:::::D     D:::::U   L:::::L                 D:::::D     D:::::D
+G:::::G    GGGGG::::GO:::::O     O:::::O U:::::D     D:::::U   L:::::L                 D:::::D     D:::::D
+G:::::G        G::::GO:::::O     O:::::O U:::::D     D:::::U   L:::::L                 D:::::D     D:::::D
+ G:::::G       G::::GO::::::O   O::::::O U::::::U   U::::::U   L:::::L         LLLLLL  D:::::D    D:::::D
+  G:::::GGGGGGGG::::GO:::::::OOO:::::::O U:::::::UUU:::::::U LL:::::::LLLLLLLLL:::::LDDD:::::DDDDD:::::D
+   GG:::::::::::::::G OO:::::::::::::OO   UU:::::::::::::UU  L::::::::::::::::::::::LD:::::::::::::::DD
+     GGG::::::GGG:::G   OO:::::::::OO       UU:::::::::UU    L::::::::::::::::::::::LD::::::::::::DDD
+        GGGGGG   GGGG     OOOOOOOOO           UUUUUUUUU      LLLLLLLLLLLLLLLLLLLLLLLLDDDDDDDDDDDDD
+
+
+
+
+
+
+                                                                                                          
+
+    -->
     <?php print $head; ?>
     <title><?php print $head_title; ?></title>
     <?php print $styles; ?>
