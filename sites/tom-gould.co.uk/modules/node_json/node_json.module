@@ -1,0 +1,93 @@
+<?php
+
+/**
+ * Implements hook_menu
+ *
+ * @return string
+ */
+function node_json_menu() {
+  $items = array();
+  $items['node-json/types']   = array(
+    'title'            => NULL,
+    'page callback'    => 'node_json_get_all_content_types',
+    'page arguments'   => array(2),
+    'access arguments' => array('access content'),
+    'type'             => MENU_CALLBACK,
+  );
+  $items['node-json/nodes/%'] = array(
+    'title'            => NULL,
+    'page callback'    => 'node_json_get_all_nids_by_type',
+    'page arguments'   => array(2),
+    'access arguments' => array('access content'),
+    'type'             => MENU_CALLBACK,
+  );
+  $items['node/%/json'] = array(
+    'title'            => NULL,
+    'page callback'    => 'node_json_node_in_json',
+    'page arguments'   => array(1),
+    'access arguments' => array('access content'),
+    'type'             => MENU_CALLBACK,
+  );
+
+  return $items;
+}
+
+/**
+ * Prints a node in JSON format
+ *
+ * @param type $nid
+ */
+function node_json_node_in_json($nid) {
+  $node = node_load($nid);
+
+  if (is_object($node)) {
+    print json_encode($node);
+    die;
+  }
+}
+
+/**
+ * Prints the nids of the node types specified in JSON format
+ *
+ * @param string $type
+ */
+function node_json_get_all_nids_by_type($type) {
+  $query  = db_select('node', 'n')
+    ->fields('n', array('nid'))
+    ->condition('n.status', 1)
+    ->orderBy('n.nid');
+  $result = $query->execute();
+
+  $nids   = array();
+  foreach ($result as $row) {
+    $nids[] = $row->nid;
+  }
+
+  print json_encode($nids);
+  die;
+}
+
+/**
+ * Prints the nids of the node types specified in JSON format
+ *
+ * @param string $type
+ */
+function node_json_get_all_content_types() {
+  $result = db_query("SELECT DISTINCT type FROM node WHERE status = 1 ORDER BY type");
+
+  $query = db_select('node', 'n')
+    ->distinct()
+    ->fields('n', array('type'))
+    ->condition('n.status', 1)
+    ->groupBy('n.type')
+    ->orderBy('n.type');
+  $result = $query->execute();
+
+  $types  = array();
+  foreach ($result as $row) {
+    $types[] = $row->type;
+  }
+
+  print json_encode($types);
+  die;
+}
