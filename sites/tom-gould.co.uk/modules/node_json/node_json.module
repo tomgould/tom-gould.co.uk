@@ -40,7 +40,7 @@ function node_json_menu() {
 function node_json_node_in_json($nid) {
   $node = node_load($nid);
 
-  if (is_object($node) && $node->status == 1) {
+  if (is_object($node) && $node->status == '1') {
     print json_encode($node);
     die;
   }
@@ -58,7 +58,7 @@ function node_json_node_in_json($nid) {
 function node_json_get_all_nids_by_type($type) {
   $query  = db_select('node', 'n')
     ->fields('n', array('nid'))
-    ->condition('n.status', 1)
+    ->condition('n.status', '1')
     ->condition('n.type', $type)
     ->orderBy('n.nid');
   $result = $query->execute();
@@ -83,7 +83,7 @@ function node_json_get_all_content_types() {
   $query = db_select('node', 'n')
     ->distinct()
     ->fields('n', array('type'))
-    ->condition('n.status', 1)
+    ->condition('n.status', '1')
     ->groupBy('n.type')
     ->orderBy('n.type');
   $result = $query->execute();
