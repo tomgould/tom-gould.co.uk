@@ -55,6 +55,7 @@ function node_json_get_all_nids_by_type($type) {
   $query  = db_select('node', 'n')
     ->fields('n', array('nid'))
     ->condition('n.status', 1)
+    ->condition('n.type', $type)
     ->orderBy('n.nid');
   $result = $query->execute();
 
