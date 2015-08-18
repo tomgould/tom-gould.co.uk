@@ -1,0 +1,136 @@
+<?php
+/**
+ * @file
+ *   Main module file, Imports the nodes form the old site to the new one
+ *
+ */
+
+include drupal_get_path('module', 'json_import') . '/json_import.helpers.inc';
+include drupal_get_path('module', 'json_import') . '/json_import.importers.inc';
+
+function json_import_menu() {
+  $items['test'] = array(
+    'title'            => t('For Debugging'),
+    'page callback'    => 'json_import_test',
+    'access arguments' => array('administer JSON Import'),
+    'type'             => MENU_NORMAL_ITEM,
+  );
+
+  return $items;
+}
+
+/**
+ * Implementation of hook_permission().
+ */
+function json_import_permission() {
+  $permissions['administer JSON Import'] = array(
+    'title' => t('Administer JSON Import'),
+  );
+  return $permissions;
+}
+
+function json_import_test() {
+ //  $source = json_import_get_node(17416);
+ //  json_import_import_birthday_app_entry($source);
+ //  json_import_purge_all_content();
+}
+
+/**
+ * Imports all the things
+ */
+function json_import_import_content($importer_function, $remote_type) {
+  $log_location = json_import_get_log_location();
+  $fp           = fopen($log_location . '/json_import_log_' . $importer_function . '-' . $remote_type . '.csv', 'w');
+
+  $columns = array(
+    'local NID',
+    'Remote NID',
+    'Local type',
+    'Remote type',
+    'Importer',
+    'Title',
+  );
+
+  fputcsv($fp, $columns, ',', '"');
+
+  $nids = json_import_get_nids($remote_type);
+  foreach ($nids as $nid) {
+    $source = json_import_get_node($nid);
+    if (!empty($source->status) && (int) $source->status === 1) {
+      $node   = call_user_func_array("json_import_import_" . $importer_function, array($source));
+
+      echo "Imported: " . $node->type . ": " . $node->nid . " << " . $node->remote_nid . ": " . $node->title . "\n";
+
+      $csv_row = array(
+        $node->nid,
+        $node->remote_nid,
+        $node->type,
+        $remote_type,
+        $importer_function,
+        $node->title,
+      );
+
+      fputcsv($fp, $csv_row, ',', '"');
+    }
+  }
+
+  fclose($fp);
+}
+
+/**
+ * Truncates all the tables required to purge all the content fron this site
+ */
+function json_import_purge_all_content() {
+  global $base_url;
+
+  // The block table needs the nodeblocks deleting
+  db_query('DELETE FROM block WHERE module = \'nodeblock\';');
+
+  // Truncates the required tables
+  $result = db_query('SHOW TABLES');
+  foreach ($result as $row) {
+    if (mb_strpos($base_url, 'ciuk') !== FALSE) {
+      $table = $row->Tables_in_cartoonito2015UK;
+    }
+    else {
+      $table = $row->Tables_in_cartoonito2015IT;
+    }
+
+    if (substr($table, 0, 5) == 'cache') {
+      json_import_truncate($table);
+    }
+
+    if (substr($table, 0, 10) == 'field_data') {
+      json_import_truncate($table);
+    }
+
+    if (substr($table, 0, 14) == 'field_revision') {
+      json_import_truncate($table);
+    }
+
+    if (substr($table, 0, 5) == 'file_') {
+      json_import_truncate($table);
+    }
+
+    if (substr($table, 0, 4) == 'node' && $table != 'node_type') {
+      json_import_truncate($table);
+    }
+
+    if (substr($table, 0, 7) == 'search_') {
+      json_import_truncate($table);
+    }
+
+    if (substr($table, 0, 7) == 'webform') {
+      json_import_truncate($table);
+    }
+
+    if (
+      $table == 'taxonomy_index' || $table == 'url_alias' || $table == 'watchdog' || $table == 'feeds_item' || $table == 'feeds_log'
+    ) {
+      json_import_truncate($table);
+    }
+
+    // Cleans up
+    db_query("OPTIMIZE TABLE $table");
+  } 
+}

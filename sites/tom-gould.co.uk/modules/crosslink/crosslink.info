@@ -1,6 +1,6 @@
 ; $Id$
 name = Crosslink
-description = APopulates a vocab
+description = Populates a vocab
 package = Tom Gould
 core = 7.x
 

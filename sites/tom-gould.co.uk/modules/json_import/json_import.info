@@ -1,0 +1,4 @@
+name = JSON Import
+description = Imports the nodes form any site running the node_json module.
+core = 7.x
+package = Tom Gould
