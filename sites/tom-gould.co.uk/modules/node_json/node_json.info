@@ -1,3 +1,4 @@
 name = Node JSON
 description = Exports node info & nodes to JSON for content migration
 core = 7.x
+package = Tom Gould

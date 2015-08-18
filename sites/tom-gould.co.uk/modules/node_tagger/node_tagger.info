@@ -1,6 +1,6 @@
 name = Node Tagger
 description = Provides a method for linking words in text that match the supplied taxonomy terms
-package = node_tagger
+package = Tom Gould
 core = 7.x
 
 dependencies[] = taxonomy

@@ -1,5 +1,5 @@
 name = myredirect
 description = Custom module to redirect old paths to new ones
-package = myredirect
+package = Tom Gould
 core = 7.x
 
