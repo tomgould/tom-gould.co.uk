@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Make Test Title</title>
+    <style type="text/css">
+      body {
+        background: #000
+      }
+      #content {
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 20px 15px;
+        text-align: center;
+      }
+      h1 {
+        color:#00FF00;
+        text-align:center;
+        font-size:50px;
+      }
+      p, a {
+        font-family:"Times New Roman";
+        font-size:20px;
+        color: #00FF00;
+      }
+
+      #fix_me {
+        font-family:"Times New Roman";
+        font-size:30px;
+        width: 800px;
+        background-color:#000;
+        border: 3px solid #00FF00;
+        color: #00FF00;
+      }
+
+      #party_time {
+        font-size: 30px;
+        clear:both;
+        margin-top: 20px;
+        display: block;
+      }
+
+      #stop_party_time {
+        font-size: 30px;
+        clear:both;
+        margin-top: 20px;
+        display: none;
+      }
+    </style>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+  </head>
+  <body>
+    <div id="content">
+      <h1 id="results">Start typing below....</h1>
+
+      <input id="fix_me" name="string">
+
+      <a href="#" id="party_time">Party Time</a>
+      <a href="#" id="stop_party_time">STOP! I hate this!!!</a>
+    </div>
+    <script type="text/javascript">
+    var Env = {};
+
+    Env.colors = ['#000000', '#FF0000', '#0000FF', '#FFFF00', '#00FFFF', '#FF00FF', '#C0C0C0', '#FFFFFF']; //List the hex codes you want to loop through here.
+    Env.color_index = 0;
+    Env.interval = 10; //How long the color blend transition lasts. (in milliseconds, 1000 = 1 second)
+    Env.stop = false;
+    
+    function bg_color_tween(stop) {
+      if (Env.stop) {
+        Env.stop = false;
+        $('body').css('backgroundColor', '#000000');
+        return;
+      }
+      $('body').animate({ backgroundColor: Env.colors[Env.color_index] }, Env.interval, 'linear',
+      $.proxy(function() {
+        if(Env.color_index == Env.colors.length) {
+          Env.color_index = 0;
+        } else {
+          //If we are at the end of the Env.colors array go back to the beginning.
+          //Lets move to the next color in the Env.colors array.s
+          Env.color_index++;
+        }
+        bg_color_tween();
+      }), this);
+    }
+
+    function ucwords (str) {
+      return (str + '').replace(/^([a-z\u00E0-\u00FC])|\s+([a-z\u00E0-\u00FC])/g, function ($1) {
+        return $1.toUpperCase();
+      });
+    }
+
+    $(document).ready(function() {
+      $('#party_time').on('click', function(event){
+        event.preventDefault();
+        bg_color_tween();
+        $(this).hide();
+        $('#stop_party_time').css('display','block');
+      });
+
+      $('#stop_party_time').on('click', function(event){
+        Env.stop = true;
+        event.preventDefault();
+        $(this).hide();
+        $('#party_time').show();
+      });
+
+      $('#fix_me').on('keyup', function(event){
+        var text = $(this).val();
+        if (text.length == 0) {
+          $('#results').text('Start typing below....');
+        } else {
+          var clean_text = "test" + ucwords(text.replace(/_/g, ' ').replace(/test/i,'')).replace(/\s+/g, '');
+          $('#results').text(clean_text);
+        }
+      });
+    });
+    </script>
+  </body>
+</html>
