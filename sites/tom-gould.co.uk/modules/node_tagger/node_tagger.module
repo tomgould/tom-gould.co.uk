@@ -163,7 +163,9 @@ function node_tagger_tag(&$content, $terms) {
 
   foreach ($terms as $term) {
     // Link the specific terms
-    $link_vars = node_tagger_link_terms($link_vars, $term->name, $term->tid);
+    if (!empty($term) && is_object($term) && !empty($term->name) && !empty($term->tid)) {
+      $link_vars = node_tagger_link_terms($link_vars, $term->name, $term->tid);
+    }
   }
 
   $ary_tags       = $link_vars['ary_tags'];
