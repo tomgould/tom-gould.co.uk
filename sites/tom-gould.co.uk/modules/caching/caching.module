@@ -1,8 +1,9 @@
 <?php
+
 /**
  * @file
  * The main module file for the caching module
- * 
+ *
  */
 
 /**
@@ -37,7 +38,6 @@ function caching_menu() {
  * Form builder for administrative settings.
  */
 function caching_settings_form() {
-
   // define fieldset for admin area
   $form['caching'] = array(
     '#type'        => 'fieldset',
@@ -45,7 +45,7 @@ function caching_settings_form() {
     '#description' => t('Settings for using Caching.')
   );
 
-  $form['caching']['caching_cache_render'] = array(
+  $form['caching']['caching_cache_render']    = array(
     '#type'          => 'checkbox',
     '#title'         => t('Cache the rendered output '),
     '#default_value' => variable_get('caching_cache_render', true),
@@ -54,11 +54,11 @@ function caching_settings_form() {
   $form['caching']['caching_cache_menu_tree'] = array(
     '#type'          => 'checkbox',
     '#title'         => t('Cache the loaded menus '),
-    '#default_value' => variable_get('tagclouds_display_node_link', true),
+    '#default_value' => variable_get('caching_cache_menu_tree', true),
     '#description'   => t('Cache the loaded menus using the caching_cache_menu_tree function.'),
   );
 
-  $form['caching']['caching_cache_render_cache_time'] = array(
+  $form['caching']['caching_cache_render_cache_time']    = array(
     '#type'          => 'select',
     '#title'         => t('Cache time for caching_cache_render'),
     '#options'       => array(
@@ -115,7 +115,7 @@ function caching_settings_form() {
 function caching_cache_render($array) {
 
   $should_i_run = variable_get('caching_cache_render', '1');
-  if ($should_i_run !== 1) {
+  if ($should_i_run != 1) {
     return render($array);
   }
 
@@ -149,7 +149,7 @@ function caching_cache_render($array) {
 function caching_cache_menu_tree($menu_name) {
 
   $should_i_run = variable_get('caching_menu_tree_cache', '1');
-  if ($should_i_run !== 1) {
+  if ($should_i_run != 1) {
     return menu_tree($menu_name);
   }
 
@@ -162,12 +162,11 @@ function caching_cache_menu_tree($menu_name) {
     $results    = menu_tree($menu_name);
     $cache_time = variable_get('caching_cache_menu_tree_cache_time', 300);
     if (strlen($cache_time) > 1) {
-       cache_set($cid, serialize($results), 'cache_caching', time() + $cache_time);
+      cache_set($cid, serialize($results), 'cache_caching', time() + $cache_time);
     }
     else {
-       cache_set($cid, serialize($results), 'cache_caching', $cache_time);
+      cache_set($cid, serialize($results), 'cache_caching', $cache_time);
     }
-   
   }
 
   return $results;
