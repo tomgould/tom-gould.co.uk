@@ -1,0 +1,4 @@
+name = Caching
+description = "Provides some extra caching to help improve the speed of the site."
+package = Caching
+core = 7.x

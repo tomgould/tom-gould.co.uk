@@ -7,8 +7,8 @@
  *
  * Available variables:
  * - $content: The array of content-related elements for the node. Use
- *   render($content) to print them all, or
- *   print a subset such as render($content['comment_form']).
+ *   caching_cache_render($content) to print them all, or
+ *   print a subset such as caching_cache_render($content['comment_form']).
  * - $classes: String of classes that can be used to style contextually through
  *   CSS. It can be manipulated through the variable $classes_array from
  *   preprocess functions. The default value has the following:
@@ -42,9 +42,9 @@
     <div id="comments-title">
     
         <div id="comments-title-left">
-        <?php print render($title_prefix); ?>
+        <?php print caching_cache_render($title_prefix); ?>
         <h2 class="title"><?php print t('Comments'); ?></h2>
-        <?php print render($title_suffix); ?>
+        <?php print caching_cache_render($title_suffix); ?>
         </div>
         
         <div id="comments-title-right">
@@ -55,10 +55,10 @@
     
   <?php endif; ?>
 
-  <?php print render($content['comments']); ?>
+  <?php print caching_cache_render($content['comments']); ?>
 
   <?php if ($content['comment_form']): ?>
     <h2 class="title comment-form"><?php print t('Comment'); ?></h2>
-    <?php print render($content['comment_form']); ?>
+    <?php print caching_cache_render($content['comment_form']); ?>
   <?php endif; ?>
 </div>

@@ -351,5 +351,5 @@ function ctheme_render_field($field_name, $node, $settings = array(), $key = 0) 
 
   $output = field_view_value('node', $node, $field_name, $field[$key], $settings);
 
-  return render($output);
+  return caching_cache_render($output);
 }

@@ -1,0 +1,25 @@
+<?php
+
+/**
+ * @file
+ * Install, update, and uninstall functions for the caching module.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function caching_schema() {
+  $schema['cache_caching']                = drupal_get_schema_unprocessed('system', 'cache');
+  $schema['cache_caching']['description'] = 'Cache table for Caching module to store caching hashes.';
+  return $schema;
+
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function caching_uninstall() {
+  // Delete variables.
+  variable_del('caching_*');
+
+}

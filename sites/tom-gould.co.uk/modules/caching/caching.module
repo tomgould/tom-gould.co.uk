@@ -1,0 +1,165 @@
+<?php
+/**
+ * @file
+ * The main module file for the caching module
+ * 
+ */
+
+/**
+ * Implements hook_menu()
+ */
+function caching_menu() {
+  $items = array();
+
+  $items['admin/config/development/performance/caching'] = array(
+    'title'            => t('Caching Module Settings'),
+    'page callback'    => 'drupal_get_form',
+    'page arguments'   => array('caching_settings_form'),
+    'access arguments' => array('administer caching'),
+    'type'             => MENU_NORMAL_ITEM,
+  );
+
+  return $items;
+
+}
+
+/**
+ * Form builder for administrative settings.
+ */
+function caching_settings_form() {
+
+  // define fieldset for admin area
+  $form['caching'] = array(
+    '#type'        => 'fieldset',
+    '#title'       => t('Caching'),
+    '#description' => t('Settings for using Caching.')
+  );
+
+  $form['caching']['caching_cache_render'] = array(
+    '#type'          => 'checkbox',
+    '#title'         => t('Cache the rendered output '),
+    '#default_value' => variable_get('caching_cache_render', true),
+    '#description'   => t('Cache the rendered output using the caching_cache_render function.'),
+  );
+  $form['caching']['caching_cache_menu_tree'] = array(
+    '#type'          => 'checkbox',
+    '#title'         => t('Cache the loaded menus '),
+    '#default_value' => variable_get('tagclouds_display_node_link', true),
+    '#description'   => t('Cache the loaded menus using the caching_cache_menu_tree function.'),
+  );
+
+  $form['caching']['caching_cache_render_cache_time'] = array(
+    '#type'          => 'select',
+    '#title'         => t('Cache time for caching_cache_render'),
+    '#options'       => array(
+      CACHE_PERMANENT => t('Permenant'),
+      CACHE_TEMPORARY => t('Temporary'),
+      60              => t('1 minute'),
+      300             => t('5 minutes'),
+      600             => t('10 minutes'),
+      1200            => t('20 minutes'),
+      1800            => t('30 minutes'),
+      3600            => t('1 hour'),
+      7200            => t('2 hour'),
+      14400           => t('4 hour'),
+      28800           => t('8 hour'),
+      43200           => t('12 hour'),
+      86400           => t('24 hour'),
+    ),
+    '#default_value' => variable_get('caching_cache_render_cache_time', CACHE_PERMANENT),
+    '#description'   => t('SHow long to cache the caching_cache_render data for.'),
+  );
+  $form['caching']['caching_cache_menu_tree_cache_time'] = array(
+    '#type'          => 'select',
+    '#title'         => t('Cache time for caching_cache_menu_tree'),
+    '#options'       => array(
+      CACHE_PERMANENT => t('Permenant'),
+      CACHE_TEMPORARY => t('Temporary'),
+      60              => t('1 minute'),
+      300             => t('5 minutes'),
+      600             => t('10 minutes'),
+      1200            => t('20 minutes'),
+      1800            => t('30 minutes'),
+      3600            => t('1 hour'),
+      7200            => t('2 hour'),
+      14400           => t('4 hour'),
+      28800           => t('8 hour'),
+      43200           => t('12 hour'),
+      86400           => t('24 hour'),
+    ),
+    '#default_value' => variable_get('caching_cache_menu_tree_cache_time', CACHE_PERMANENT),
+    '#description'   => t('SHow long to cache the caching_cache_menu_tree data for.'),
+  );
+
+  return system_settings_form($form);
+
+}
+
+/**
+ * ines render function wrapper for menus to stop the alias lookup happening so much
+ *
+ * @param render array  $array
+ *
+ * @return array
+ */
+function caching_cache_render($array) {
+
+  $should_i_run = variable_get('caching_cache_render', '1');
+  if ($should_i_run !== 1) {
+    return render($array);
+  }
+
+  $geo   = !empty($_COOKIE['geo_location']) ? strtolower($_COOKIE['geo_location']) : 'en_gb';
+  $cid   = "cache_render_" . $geo . "_" . md5(json_encode($array));
+  if ($cache = cache_get($cid, 'cache_caching')) {
+    $results = ($cache->data);
+  }
+  else {
+    $results    = render($array);
+    $cache_time = variable_get('caching_cache_render_cache_time', CACHE_PERMANENT);
+    if (strlen($cache_time) > 1) {
+      cache_set($cid, $results, 'cache_caching', time() + $cache_time);
+    }
+    else {
+      cache_set($cid, $results, 'cache_caching', $cache_time);
+    }
+  }
+
+  return $results;
+
+}
+
+/**
+ * Caches the loaded menu
+ *
+ * @param string $menu_name
+ *
+ * @return array
+ */
+function caching_cache_menu_tree($menu_name) {
+
+  $should_i_run = variable_get('caching_menu_tree_cache', '1');
+  if ($should_i_run !== 1) {
+    return menu_tree($menu_name);
+  }
+
+  $geo   = !empty($_COOKIE['geo_location']) ? strtolower($_COOKIE['geo_location']) : 'en_gb';
+  $cid   = "menu_tree_cache_" . $geo . "_" . $menu_name;
+  if ($cache = cache_get($cid, 'cache_caching')) {
+    $results = unserialize($cache->data);
+  }
+  else {
+    $results    = menu_tree($menu_name);
+    $cache_time = variable_get('caching_cache_menu_tree_cache_time', CACHE_PERMANENT);
+    if (strlen($cache_time) > 1) {
+       cache_set($cid, serialize($results), 'cache_caching', time() + $cache_time);
+    }
+    else {
+       cache_set($cid, serialize($results), 'cache_caching', $cache_time);
+    }
+   
+  }
+
+  return $results;
+
+}
