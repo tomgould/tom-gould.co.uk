@@ -66,7 +66,7 @@ function caching_settings_form() {
       43200           => t('12 hour'),
       86400           => t('24 hour'),
     ),
-    '#default_value' => variable_get('caching_cache_render_cache_time', CACHE_PERMANENT),
+    '#default_value' => variable_get('caching_cache_render_cache_time', 300),
     '#description'   => t('SHow long to cache the caching_cache_render data for.'),
   );
   $form['caching']['caching_cache_menu_tree_cache_time'] = array(
@@ -87,7 +87,7 @@ function caching_settings_form() {
       43200           => t('12 hour'),
       86400           => t('24 hour'),
     ),
-    '#default_value' => variable_get('caching_cache_menu_tree_cache_time', CACHE_PERMANENT),
+    '#default_value' => variable_get('caching_cache_menu_tree_cache_time', 300),
     '#description'   => t('SHow long to cache the caching_cache_menu_tree data for.'),
   );
 
@@ -116,7 +116,7 @@ function caching_cache_render($array) {
   }
   else {
     $results    = render($array);
-    $cache_time = variable_get('caching_cache_render_cache_time', CACHE_PERMANENT);
+    $cache_time = variable_get('caching_cache_render_cache_time', 300);
     if (strlen($cache_time) > 1) {
       cache_set($cid, $results, 'cache_caching', time() + $cache_time);
     }
@@ -150,7 +150,7 @@ function caching_cache_menu_tree($menu_name) {
   }
   else {
     $results    = menu_tree($menu_name);
-    $cache_time = variable_get('caching_cache_menu_tree_cache_time', CACHE_PERMANENT);
+    $cache_time = variable_get('caching_cache_menu_tree_cache_time', 300);
     if (strlen($cache_time) > 1) {
        cache_set($cid, serialize($results), 'cache_caching', time() + $cache_time);
     }
