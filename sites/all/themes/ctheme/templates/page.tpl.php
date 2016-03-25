@@ -30,19 +30,19 @@
       $main_menu_tree = i18n_menu_translated_tree(variable_get('menu_main_links_source', 'main-menu'));
     }
     else {
-      $main_menu_tree = caching_cache_menu_tree(variable_get('menu_main_links_source', 'main-menu'));
+      $main_menu_tree = menu_tree(variable_get('menu_main_links_source', 'main-menu'));
 }
     print drupal_render($main_menu_tree);
     ?>
     <div class="search-area">
-      <?php print caching_cache_render($page['search_area']); ?>
+      <?php print render($page['search_area']); ?>
     </div>
   </div><!-- EOF: #header-menu-inside -->
 </div><!-- EOF: #header-menu -->
 
 <!-- Banner. -->
 <div id="banner">
-	<?php print caching_cache_render($page['banner']); ?>
+	<?php print render($page['banner']); ?>
   <?php if (theme_get_setting('slideshow_display','ctheme')): ?>
   <?php if ($is_front): ?>
     <?php print ($slideshow); ?>
@@ -63,7 +63,7 @@
       
       <?php if (theme_get_setting('breadcrumb_display','ctheme')): print $breadcrumb; endif; ?>
       
-      <?php if ($page['highlighted']): ?><div id="highlighted"><?php print caching_cache_render($page['highlighted']); ?></div><?php endif; ?>
+      <?php if ($page['highlighted']): ?><div id="highlighted"><?php print render($page['highlighted']); ?></div><?php endif; ?>
      
       <?php if ($messages): ?>
       <div id="console" class="clearfix">
@@ -73,25 +73,25 @@
    
       <?php if ($page['help']): ?>
       <div id="help">
-      <?php print caching_cache_render($page['help']); ?>
+      <?php print render($page['help']); ?>
       </div>
       <?php endif; ?>
       
       <?php if ($action_links): ?>
       <ul class="action-links">
-      <?php print caching_cache_render($action_links); ?>
+      <?php print render($action_links); ?>
       </ul>
       <?php endif; ?>
       
-			<?php print caching_cache_render($title_prefix); ?>
+			<?php print render($title_prefix); ?>
       <?php if ($title): ?>
       <h1><?php print $title ?></h1>
       <?php endif; ?>
-      <?php print caching_cache_render($title_suffix); ?>
+      <?php print render($title_suffix); ?>
       
-      <?php if ($tabs): ?><?php print caching_cache_render($tabs); ?><?php endif; ?>
+      <?php if ($tabs): ?><?php print render($tabs); ?><?php endif; ?>
       
-      <?php print caching_cache_render($page['content']); ?>
+      <?php print render($page['content']); ?>
       
       <?php print $feed_icons; ?>
       
@@ -99,7 +99,7 @@
     
     <div id="sidebar">
        
-      <?php print caching_cache_render($page['sidebar_first']); ?>
+      <?php print render($page['sidebar_first']); ?>
 
     </div><!-- EOF: #sidebar -->
 
@@ -113,15 +113,15 @@
   <div id="footer-inside">
   
     <div class="footer-area first">
-    <?php print caching_cache_render($page['footer_first']); ?>
+    <?php print render($page['footer_first']); ?>
     </div><!-- EOF: .footer-area -->
     
     <div class="footer-area second">
-    <?php print caching_cache_render($page['footer_second']); ?>
+    <?php print render($page['footer_second']); ?>
     </div><!-- EOF: .footer-area -->
     
     <div class="footer-area third">
-    <?php print caching_cache_render($page['footer_third']); ?>
+    <?php print render($page['footer_third']); ?>
     </div><!-- EOF: .footer-area -->
      
   </div><!-- EOF: #footer-inside -->
@@ -137,13 +137,13 @@
     
       <?php print theme('links__system_secondary_menu', array('links' => $secondary_menu, 'attributes' => array('class' => array('secondary-menu', 'links', 'clearfix')))); ?>
       
-      <?php print caching_cache_render($page['footer']); ?>
+      <?php print render($page['footer']); ?>
       
     </div>
     
     <div id="footer-bottom-right">
     
-    	<?php print caching_cache_render($page['footer_bottom_right']); ?>
+    	<?php print render($page['footer_bottom_right']); ?>
     
     </div><!-- EOF: #footer-bottom-right -->
      

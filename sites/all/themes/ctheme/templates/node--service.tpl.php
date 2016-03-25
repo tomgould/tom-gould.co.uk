@@ -9,7 +9,7 @@
 <?php if (empty($node->view->name) || $node->view->name != 'service'): ?>
 <div id="node-<?php print $node->nid; ?>" class="<?php print $classes; ?>"<?php print $attributes; ?>>
 
-  <?php print caching_cache_render($title_prefix); ?>
+  <?php print render($title_prefix); ?>
   <?php if (!$page): ?>
   <h2<?php print $title_attributes; ?>>
     <?php
@@ -19,7 +19,7 @@
     ?>
   </h2>
   <?php endif; ?>
-  <?php print caching_cache_render($title_suffix); ?>
+  <?php print render($title_suffix); ?>
 
   <?php if ($display_submitted): ?>
   <div class="submitted"><?php print $submitted ?></div>
@@ -48,16 +48,16 @@
     // We hide the comments and links now so that we can render them later.
     hide($content['comments']);
     hide($content['links']);
-    print caching_cache_render($content);
+    print render($content);
     ?>
   </div>
 
   <div class="clearfix">
     <?php if (!empty($content['links'])): ?>
-    <div class="links"><?php print caching_cache_render($content['links']); ?></div>
+    <div class="links"><?php print render($content['links']); ?></div>
     <?php endif; ?>
 
-    <?php print caching_cache_render($content['comments']); ?>
+    <?php print render($content['comments']); ?>
   </div>
 
 </div>
@@ -90,7 +90,7 @@
       ?>
     </h2>
     <?php print !empty($img) ? $img : NULL; ?>
-    <?php print caching_cache_render($content); ?>
+    <?php print render($content); ?>
     <div style="clear:both; padding:10px 0 0 0; text-align:right;">
       <?php
         print l(t('More info'), 'node/' . $node->nid, array('attributes' => array(

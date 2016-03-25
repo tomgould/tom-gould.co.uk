@@ -9,12 +9,12 @@
   <?php endif; ?>
   
 	<span class="submitted"><?php print $submitted ?></span>
-    <?php print caching_cache_render($title_prefix); ?>
+    <?php print render($title_prefix); ?>
     <h3<?php print $title_attributes; ?>><?php print $title ?></h3>
-    <?php print caching_cache_render($title_suffix); ?>
+    <?php print render($title_suffix); ?>
 
     <div class="content"<?php print $content_attributes; ?>>
-      <?php hide($content['links']); print caching_cache_render($content); ?>
+      <?php hide($content['links']); print render($content); ?>
       <?php if ($signature): ?>
       <div class="clearfix">
         <div>—</div>
@@ -24,5 +24,5 @@
     </div>
   </div>
 
-  <?php print caching_cache_render($content['links']) ?>
+  <?php print render($content['links']) ?>
 </div>
