@@ -68,13 +68,13 @@
           prefix: 'snow3d',
           url: '',
           images: '1.png,2.png,3.png,4.png,5.png,6.png,7.png,8.png,9.png',
-          num: 2000,
+          num: 300,
           minScale: 10,
           showOnce: '',
           disableMouse: false,
           enableMobile: true,
           fadeScroll: true,
-          maxScale: 50,
+          maxScale: 100,
           closeButton: 0,
           closeButtonMode: 'once',
           closeButtonStyles: 'border-radius: 21px;margin: 10px;'
@@ -83,15 +83,12 @@
     </script>
   </head>
   <body>
-
-    <div class="image-div"><img class="image" src="SAMANIMATION.gif" /></div>
-
     <script type="text/javascript">
       var Env = {};
 
       Env.colors = ['#000000', '#FF0000', '#0000FF', '#FFFF00', '#00FFFF', '#FF00FF', '#C0C0C0', '#FFFFFF']; //List the hex codes you want to loop through here.
       Env.color_index = 0;
-      Env.interval = 10; //How long the color blend transition lasts. (in milliseconds, 1000 = 1 second)
+      Env.interval = 15; //How long the color blend transition lasts. (in milliseconds, 1000 = 1 second)
       Env.stop = false;
 
       function bg_color_tween(stop) {
