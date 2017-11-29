@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>OMGDrupal Ltd</title>
+    <style type="text/css">
+      body {
+        background: #000
+      }
+      #content {
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 20px 15px;
+        text-align: center;
+      }
+      h1 {
+        color:#00FF00;
+        text-align:center;
+        font-size:50px;
+      }
+      p, a {
+        font-family:"Times New Roman";
+        font-size:20px;
+        color: #00FF00;
+      }
+
+      #fix_me {
+        font-family:"Times New Roman";
+        font-size:30px;
+        width: 800px;
+        background-color:#000;
+        border: 3px solid #00FF00;
+        color: #00FF00;
+      }
+
+      #party_time {
+        font-size: 30px;
+        clear:both;
+        margin-top: 20px;
+        display: block;
+      }
+
+      #stop_party_time {
+        font-size: 30px;
+        clear:both;
+        margin-top: 20px;
+        display: none;
+      }
+      .image-div{
+        height:100%;
+        text-align:center;
+      }
+      .middle > * {
+        vertical-align: middle;
+      }
+    </style>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="http://tom-gould.co.uk/bj/jquery-1.8.3.min.js"></script>
+    <script>
+      var jq183 = jQuery.noConflict();
+    </script>
+    <script type="text/javascript" src="http://tom-gould.co.uk/bj/snow-3d-vendor.min.js"></script>
+    <script type="text/javascript" src="http://tom-gould.co.uk/bj/snow-3d.min.js"></script>
+    <script type="text/javascript">
+      jq183(function () {
+        jq183('body').snow3d({
+          prefix: 'snow3d',
+          url: '',
+          images: '1.png,2.png,3.png,4.png,5.png,6.png,7.png,8.png,9.png',
+          num: 2000,
+          minScale: 10,
+          showOnce: '',
+          disableMouse: false,
+          enableMobile: true,
+          fadeScroll: true,
+          maxScale: 50,
+          closeButton: 0,
+          closeButtonMode: 'once',
+          closeButtonStyles: 'border-radius: 21px;margin: 10px;'
+        });
+      });
+    </script>
+  </head>
+  <body>
+
+    <div class="image-div"><img class="image" src="SAMANIMATION.gif" /></div>
+
+    <script type="text/javascript">
+      var Env = {};
+
+      Env.colors = ['#000000', '#FF0000', '#0000FF', '#FFFF00', '#00FFFF', '#FF00FF', '#C0C0C0', '#FFFFFF']; //List the hex codes you want to loop through here.
+      Env.color_index = 0;
+      Env.interval = 10; //How long the color blend transition lasts. (in milliseconds, 1000 = 1 second)
+      Env.stop = false;
+
+      function bg_color_tween(stop) {
+        if (Env.stop) {
+          Env.stop = false;
+          $('body').css('backgroundColor', '#000000');
+          return;
+        }
+        $('body').animate({backgroundColor: Env.colors[Env.color_index]}, Env.interval, 'linear',
+          $.proxy(function () {
+            if (Env.color_index == Env.colors.length) {
+              Env.color_index = 0;
+            } else {
+              //If we are at the end of the Env.colors array go back to the beginning.
+              //Lets move to the next color in the Env.colors array.s
+              Env.color_index++;
+            }
+            bg_color_tween();
+          }), this);
+      }
+
+      $(document).ready(function () {
+        bg_color_tween();
+      });
+    </script>
+  </body>
+</html>
+
+
